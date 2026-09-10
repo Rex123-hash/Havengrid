@@ -39,6 +39,8 @@ interface HoverTarget {
  */
 export function NetworkStage({ scenario, state, reducedMotion }: Props) {
   const [hover, setHover] = useState<HoverTarget | null>(null);
+  const [selected, setSelected] = useState<HoverTarget | null>(null);
+  const detail = selected ? {...selected, fs: state.facilities.find(f => f.facility.id === selected.fs.facility.id)!} : hover;
   const focus = scenario.facilities.find((f) => f.id === scenario.focusFacilityId)!;
   const byId = useMemo(
     () => Object.fromEntries(scenario.facilities.map((f) => [f.id, f])),
@@ -72,7 +74,7 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
 
   return (
     <div className={styles.wrap} onPointerLeave={() => setHover(null)}>
-      <div className={styles.networkHeader}><span><i /> DISTRICT NETWORK</span><b>14 facilities <em>/</em> one connected system</b></div>
+      <div className={styles.networkHeader}><span><i /> DISTRICT NETWORK</span><b>14 facilities <em>/</em> select a facility</b></div>
       <svg
         className={styles.svg}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -146,6 +148,7 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
               resolveGlow={state.resolveGlow}
               hovered={hover?.fs.facility.id === fs.facility.id}
               onHover={setHover}
+              onSelect={setSelected}
             />
           ))}
         </g>
@@ -160,7 +163,7 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
         <div className={styles.stockComparison}><span>Stock <b>{scenario.item.currentStock + (state.resolved ? state.activePlan.transferUnits! : 0)}</b></span><span>14-day need <b>{scenario.item.projectedDemand}</b></span></div>
         <span className={styles.forecastNote}>Illustrative demo · {scenario.item.name}</span>
       </div>
-      {hover && <FacilityCard target={hover} item={scenario.item} isFocus={hover.fs.facility.id === focus.id} />}
+      {detail && <div className={styles.selectedDetail}><button onClick={() => {setSelected(null);setHover(null);}} aria-label="Close facility details">×</button><FacilityCard target={detail} item={scenario.item} isFocus={detail.fs.facility.id === focus.id} /></div>}
     </div>
   );
 }
@@ -319,12 +322,14 @@ function FacilityNode({
   resolveGlow,
   hovered,
   onHover,
+  onSelect,
 }: {
   fs: FacilityState;
   isFocus: boolean;
   resolveGlow: number;
   hovered: boolean;
   onHover: (t: HoverTarget | null) => void;
+  onSelect: (t: HoverTarget | null) => void;
 }) {
   const { facility: f, risk, transition, severity, freshness } = fs;
   const r = nodeRadius(f.tier) * 1.22;
@@ -373,7 +378,9 @@ function FacilityNode({
       className={styles.node}
       data-hovered={hovered}
       tabIndex={0}
-      role="img"
+      role="button"
+      onClick={() => onSelect({fs, x:0, y:0, flip:false})}
+      onKeyDown={e => {if(e.key === "Enter" || e.key === " "){e.preventDefault();onSelect({fs,x:0,y:0,flip:false});}}}
       aria-label={`${f.name} — ${risk === 'unknown' ? 'no forecast available' : risk === 'breach' ? `predicted breach on day ${fs.effectiveBreachDay}` : risk === 'watch' ? `tight, predicted breach on day ${fs.effectiveBreachDay}` : 'on track'}`}
       onPointerEnter={enter}
       onFocus={enter}

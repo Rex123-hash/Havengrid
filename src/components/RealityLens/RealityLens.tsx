@@ -7,6 +7,7 @@ interface Props {
   evidence: RealityLensEvidence;
   /** Flipped by the story only after the confirmation threshold is crossed. */
   confirmed: boolean;
+  onConfirm?: () => void;
 }
 
 /**
@@ -17,7 +18,7 @@ interface Props {
  * must not have moved — so this component owns no side effects at all. It
  * renders evidence and a pending state; the story decides when a human agreed.
  */
-export function RealityLens({ evidence, confirmed }: Props) {
+export function RealityLens({ evidence, confirmed, onConfirm }: Props) {
   const delta = evidence.fieldEvidence - evidence.digitalRecord;
 
   return (
@@ -78,6 +79,7 @@ export function RealityLens({ evidence, confirmed }: Props) {
         </div>
       </div>
 
+      {!confirmed && onConfirm && <button className={styles.confirmButton} onClick={onConfirm}>Confirm demo count · recalculate plan <Check size={16} /></button>}
       <p className={`${styles.gate} ${confirmed ? styles.gateDone : ''}`} role="status">
         {confirmed ? (
           <>

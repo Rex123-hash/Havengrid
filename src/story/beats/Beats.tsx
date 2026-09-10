@@ -253,10 +253,12 @@ export function RealityLensBeat({
   opacity,
   scenario,
   state,
+  onConfirm,
 }: {
   opacity: number;
   scenario: LandingScenario;
   state: StoryState;
+  onConfirm: () => void;
 }) {
   const c = state.evidenceConfirmed ? copy.cascade : copy.realityLens;
   return (
@@ -264,7 +266,7 @@ export function RealityLensBeat({
       <span className={`eyebrow ${styles.kicker}`}>{c.eyebrow}</span>
       <h2 className={styles.h2}>{c.headline}</h2>
       <p className={styles.body}>{c.body}</p>
-      <RealityLens evidence={scenario.realityLens} confirmed={state.evidenceConfirmed} />
+      <RealityLens evidence={scenario.realityLens} confirmed={state.evidenceConfirmed} onConfirm={onConfirm} />
       <p className={styles.footnote}>{copy.realityLens.principle}</p>
     </Beat>
   );

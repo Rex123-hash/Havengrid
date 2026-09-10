@@ -25,7 +25,15 @@ export default function LandingPage() {
   const storyRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
 
-  const progress = useStoryProgress(storyRef);
+  const scrollProgress = useStoryProgress(storyRef);
+  const [confirmed, setConfirmed] = useState(false);
+  const progress = !confirmed && scrollProgress >= 0.705 ? 0.705 : scrollProgress;
+  useEffect(() => { if (scrollProgress < 0.63) setConfirmed(false); }, [scrollProgress]);
+  const confirmEvidence = () => {
+    setConfirmed(true);
+    const el = storyRef.current;
+    if (el) window.scrollTo({top: el.offsetTop + (el.offsetHeight - window.innerHeight) * 0.743, behavior:'instant'});
+  };
   const reducedMotion = usePrefersReducedMotion();
   useViewportHeight(stageRef);
 
@@ -99,6 +107,7 @@ export default function LandingPage() {
                     scenario={landingScenario}
                   />
                   <RealityLensBeat
+                    onConfirm={confirmEvidence}
                     opacity={stageOpacity(progress, 'realityLens')}
                     scenario={landingScenario}
                     state={state}

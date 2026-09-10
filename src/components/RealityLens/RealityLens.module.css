@@ -203,3 +203,5 @@
 }
 
 .grid{grid-template-columns:150px minmax(0,1fr)}.register,.registerHead,.registerCols{font-size:12px}.registerVia{font-size:10px}.gate{font-size:12px;color:#865211}.gateDone{color:var(--teal-700)}.facility{font-size:15px}@media(max-width:1100px){.grid{grid-template-columns:115px minmax(0,1fr);gap:12px}}@media(max-width:420px){.grid{grid-template-columns:1fr}.register{display:none}}
+
+.confirmButton{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:13px 16px;background:#214b35;color:white;font-size:14px;font-weight:500;border-radius:8px;margin-top:16px}.confirmButton:hover{background:#36734f}.confirmButton:focus-visible{outline:3px solid #55ac75}
