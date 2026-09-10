@@ -70,6 +70,7 @@ export default function LandingPage() {
 
       <main id="main-content">
         <section id="story" ref={storyRef} className={styles.story} aria-label="How the system works">
+          <span id="closing" style={{position:"absolute",top:"82%"}} aria-hidden="true" />
           <div ref={stageRef} className={styles.stage}>
             <HorizonRail
               stops={landingScenario.horizonStops}

@@ -53,3 +53,5 @@
     display: none;
   }
 }
+
+.word{font-size:24px!important;letter-spacing:-.045em}.accent{color:#448664}.tagline{font-family:var(--font-body);font-size:9px;letter-spacing:.09em}.mark{background:#e7eee3;border:1px solid #cbd9cb;border-radius:9px;padding:6px}

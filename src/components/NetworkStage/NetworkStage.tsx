@@ -72,6 +72,7 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
 
   return (
     <div className={styles.wrap} onPointerLeave={() => setHover(null)}>
+      <div className={styles.networkHeader}><span><i /> DISTRICT NETWORK</span><b>14 facilities <em>/</em> one connected system</b></div>
       <svg
         className={styles.svg}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -106,10 +107,10 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
               key={`${l.from}-${l.to}`}
               d={l.d}
               fill="none"
-              stroke={l.touchesFocus ? 'var(--corridor-focus)' : 'var(--corridor)'}
-              strokeWidth={l.touchesFocus ? 1.7 : 1.3}
+              stroke={l.touchesFocus ? '#81d6b4' : '#6aa58f'}
+              strokeWidth={l.touchesFocus ? 2 : 1.2}
               strokeLinecap="round"
-              opacity={l.touchesFocus ? 1 : 1 - dim * 0.66}
+              opacity={l.touchesFocus ? 0.85 : 0.45 - dim * 0.22}
             />
           ))}
         </g>
@@ -150,10 +151,11 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
         </g>
       </svg>
 
+      <div className={styles.networkFooter}><span>SCHEMATIC VIEW</span><b>{state.resolved ? 'Recovery verified' : state.evidenceConfirmed ? 'Evidence updated · replanning' : state.routeVisible > .5 ? 'Intervention proposed' : 'Care-aware forecasting'}</b><span>{String(Math.round(state.horizonDay)).padStart(2,'0')}D HORIZON</span></div>
       <div className={styles.forecast} data-resolved={state.resolved}>
         <div className={styles.forecastHeading}><span>{focus.name}</span><i>{state.resolved ? 'VERIFIED' : 'FORECAST'}</i></div>
         <p>{state.resolved ? 'Care continuity restored' : state.horizonDay < 1 ? 'Stock available today' : `Looking ${Math.round(state.horizonDay)} days ahead`}</p>
-        <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.breachDay}<small>{state.resolved ? 'care events protected' : 'predicted shortage · day of forecast'}</small></strong>
+        <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.breachDay}<small>{state.resolved ? 'care events protected' : 'day forecast · shortage predicted'}</small></strong>
         {!state.resolved && <div className={styles.forecastCare}><b>{scenario.totalCareEventsExposed}</b> future care events exposed</div>}
         <div className={styles.stockComparison}><span>Stock <b>{scenario.item.currentStock + (state.resolved ? state.activePlan.transferUnits! : 0)}</b></span><span>14-day need <b>{scenario.item.projectedDemand}</b></span></div>
         <span className={styles.forecastNote}>Illustrative demo · {scenario.item.name}</span>
@@ -389,18 +391,18 @@ function FacilityNode({
           plates, cores and drop shadows only add clutter at this size. */}
       <g opacity={Math.max(0.7, freshness)}>
         
-        <circle cx={f.x} cy={f.y} r={r + 2} fill="#ffffff" stroke="#c9dfd5" strokeWidth={0.6} />
+        <circle cx={f.x} cy={f.y} r={r + 2} fill="#163b32" stroke="#8cd4b8" strokeWidth={0.6} />
         {f.tier === 'warehouse' && (
-          <path d={hexPath(f.x, f.y, r)} fill={fill} stroke="var(--bg-base)" strokeWidth={3} strokeLinejoin="round" />
+          <path d={hexPath(f.x, f.y, r)} fill={fill} stroke="#163b32" strokeWidth={3} strokeLinejoin="round" />
         )}
         {f.tier === 'chc' && (
-          <path d={diamondPath(f.x, f.y, r)} fill={fill} stroke="var(--bg-base)" strokeWidth={3} strokeLinejoin="round" />
+          <path d={diamondPath(f.x, f.y, r)} fill={fill} stroke="#163b32" strokeWidth={3} strokeLinejoin="round" />
         )}
         {f.tier === 'phc' &&
           (dashed ? (
             <circle cx={f.x} cy={f.y} r={r} fill="none" stroke={stroke} strokeWidth={2} strokeDasharray="3.5 3.5" />
           ) : (
-            <circle cx={f.x} cy={f.y} r={r} fill={fill} stroke="var(--bg-base)" strokeWidth={3} />
+            <circle cx={f.x} cy={f.y} r={r} fill={fill} stroke="#163b32" strokeWidth={3} />
           ))}
       </g>
 

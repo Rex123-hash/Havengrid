@@ -48,3 +48,5 @@
     gap: var(--space-4);
   }
 }
+
+.footer{background:#edf0e8;padding:40px max(24px,6vw)}.inner{max-width:1500px}.links a{font-size:14px}.note{font-family:var(--font-body);font-size:12px;padding-top:24px;color:#687967}

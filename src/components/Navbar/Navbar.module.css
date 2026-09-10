@@ -125,3 +125,6 @@
 }
 
 .link,.signIn,.cta{font-size:15px}.cta{padding:13px 18px;border-radius:10px;background:var(--teal-900)}
+
+.bar{height:88px}.inner{border-bottom:1px solid #1f492817;height:88px}.link{font-size:14px;color:#566055}.links{gap:34px}.cta{background:#193c2d;border-radius:8px;padding:13px 20px;font-size:14px;gap:18px}.signIn{font-size:14px}.bar[data-lifted='true']{background:#f7f8f3ed;backdrop-filter:blur(18px)}
+@media(max-width:760px){.bar,.inner{height:72px}.cta{padding:11px 14px;font-size:12px}}

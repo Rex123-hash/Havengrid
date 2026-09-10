@@ -19,7 +19,7 @@ export function SupportingBand() {
   return (
     <section id="capabilities" className={styles.band}>
       <div className={styles.inner}>
-        <span className="eyebrow">{copy.capabilities.eyebrow}</span>
+        <span className="eyebrow">{copy.capabilities.eyebrow}</span><h2 className={styles.heading}>Every forecast needs<br /><em>a path to recovery.</em></h2>
 
         <div className={styles.grid}>
           {copy.capabilities.items.map((item, i) => {

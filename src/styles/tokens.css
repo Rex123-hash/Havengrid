@@ -18,13 +18,13 @@
   color-scheme: light;
 
   /* ── Surfaces ─────────────────────────────────────────────────── */
-  --bg-base: #f6f8f6;
+  --bg-base: #f7f8f3;
   --bg-surface: #fafcfb;
   --bg-elevated: #ffffff;
   --bg-inset: #e9efec;
 
   /* ── Type ─────────────────────────────────────────────────────── */
-  --ink: #16221e;
+  --ink: #1b3023;
   --ink-soft: #3a4a45;
   --ink-muted: #6c7a74;
 
