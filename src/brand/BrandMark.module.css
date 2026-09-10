@@ -1,0 +1,55 @@
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--teal-700);
+  text-decoration: none;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--teal-700);
+}
+
+.glyph {
+  display: block;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.word {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.accent {
+  color: var(--teal-500);
+}
+
+.tagline {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* On a narrow screen the tagline is the first thing to go — it is decoration,
+   and keeping it would push the primary CTA off the edge. */
+@media (max-width: 720px) {
+  .tagline {
+    display: none;
+  }
+}

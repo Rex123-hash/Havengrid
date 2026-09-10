@@ -1,0 +1,132 @@
+.band {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-hairline);
+  padding: var(--space-20) clamp(var(--space-5), 4vw, var(--space-16)) var(--space-16);
+}
+
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-10);
+  margin-top: var(--space-8);
+}
+
+/* Not cards. The numbering is real — these are the three stages of the loop,
+   in order — so it earns the index; a border around each would not. */
+.item {
+  position: relative;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.index {
+  position: absolute;
+  top: var(--space-5);
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  color: var(--ink-muted);
+  opacity: 0.5;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--mint-050);
+  color: var(--teal-700);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: var(--fs-h4);
+  margin-bottom: 3px;
+}
+
+.lead {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--teal-700);
+  margin-bottom: var(--space-3);
+}
+
+.body {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── foundation ──────────────────────────────────────────────────── */
+
+.foundation {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+  margin-top: var(--space-16);
+  padding: var(--space-6) var(--space-8);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.foundationCopy p {
+  margin-top: var(--space-2);
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.chips li {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  color: var(--ink-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-full);
+  padding: 5px var(--space-3);
+  white-space: nowrap;
+}
+
+.disclosure {
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  color: var(--ink-muted);
+  opacity: 0.8;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  .foundation {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .chips {
+    justify-content: flex-start;
+  }
+}

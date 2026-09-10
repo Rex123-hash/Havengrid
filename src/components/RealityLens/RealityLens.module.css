@@ -1,0 +1,205 @@
+/* Glass surface #3 of three. */
+.lens {
+  width: 100%;
+  margin-top: var(--space-4);
+  background: var(--glass-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  padding: var(--space-4) var(--space-5) var(--space-4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+/* ── the evidence artefact ───────────────────────────────────────── */
+
+.register {
+  background: #fbf8f1;
+  border: 1px solid rgba(120, 96, 58, 0.22);
+  border-radius: var(--r-sm);
+  padding: var(--space-2) 9px var(--space-2);
+  transform: rotate(-1.5deg);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  line-height: 1.6;
+  color: #6b5a3c;
+}
+
+.registerHead {
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #4f4128;
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(120, 96, 58, 0.28);
+}
+
+.registerCols,
+.registerRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.registerCols {
+  font-size: 6.5px;
+  letter-spacing: 0.08em;
+  color: rgba(107, 90, 60, 0.7);
+  padding-bottom: 2px;
+}
+
+.registerRow {
+  border-top: 1px solid rgba(120, 96, 58, 0.14);
+  padding: 1.5px 0;
+}
+
+.registerRow span:not(:first-child) {
+  text-align: right;
+  min-width: 18px;
+}
+
+.registerVia {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(120, 96, 58, 0.2);
+  font-size: 6px;
+  letter-spacing: 0.04em;
+  color: rgba(107, 90, 60, 0.75);
+}
+
+/* ── readout ─────────────────────────────────────────────────────── */
+
+.readout {
+  min-width: 0;
+}
+
+.facility {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.012em;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: 5px 0;
+  border-top: 1px solid var(--border-hairline);
+  font-size: var(--fs-small);
+}
+
+.row span {
+  color: var(--ink-muted);
+}
+
+.row b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.rowCritical b,
+.rowCritical span {
+  color: var(--critical);
+}
+
+.rowCritical b {
+  font-weight: 700;
+}
+
+/* ── correction cascade ──────────────────────────────────────────── */
+
+.cascade {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height var(--t-slow) var(--ease-out), opacity var(--t-slow) var(--ease-out),
+    margin-top var(--t-slow) var(--ease-out);
+}
+
+.cascade[data-shown='true'] {
+  max-height: 110px;
+  opacity: 1;
+  margin-top: var(--space-2);
+}
+
+.arrow {
+  color: var(--ink-muted);
+  padding: 0 2px;
+}
+
+.cascade em {
+  font-style: normal;
+  color: var(--critical);
+  font-weight: 700;
+}
+
+.cascadeNote {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.45;
+  padding-top: 4px;
+}
+
+/* ── the gate ────────────────────────────────────────────────────── */
+
+.gate {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  border-radius: var(--r-sm);
+  padding: 8px var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  background: var(--warning-wash);
+  color: var(--warning);
+  transition: background var(--t-slow) var(--ease-out), color var(--t-slow) var(--ease-out);
+}
+
+.gateDone {
+  background: var(--stable-wash);
+  color: var(--teal-700);
+}
+
+.pendingDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  flex: none;
+}
+
+@media (max-width: 940px) {
+  .grid {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .register {
+    max-width: 140px;
+  }
+}
+
+.grid{grid-template-columns:150px minmax(0,1fr)}.register,.registerHead,.registerCols{font-size:12px}.registerVia{font-size:10px}.gate{font-size:12px;color:#865211}.gateDone{color:var(--teal-700)}.facility{font-size:15px}@media(max-width:1100px){.grid{grid-template-columns:115px minmax(0,1fr);gap:12px}}@media(max-width:420px){.grid{grid-template-columns:1fr}.register{display:none}}

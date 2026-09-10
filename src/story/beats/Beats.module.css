@@ -1,0 +1,393 @@
+/* Beats are stacked in the same box and cross-faded by scroll progress, so the
+   copy column never changes height and the network beside it never reflows. */
+.beat {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.beat[aria-hidden='false'] {
+  pointer-events: auto;
+}
+
+.kicker {
+  display: block;
+  margin-bottom: var(--space-3);
+}
+
+.h1 {
+  font-size: var(--fs-h1);
+  margin-bottom: var(--space-3);
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--space-3);
+}
+
+.subhead {
+  font-size: var(--fs-lead);
+  color: var(--teal-700);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin-bottom: var(--space-4);
+}
+
+.lead {
+  font-size: 16.5px;
+  color: var(--ink);
+  margin-bottom: var(--space-3);
+  max-width: 42ch;
+}
+
+.body {
+  color: var(--ink-soft);
+  line-height: 1.62;
+  margin-bottom: var(--space-3);
+  max-width: 46ch;
+}
+
+.footnote {
+  color: var(--ink-muted);
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  margin-top: var(--space-3);
+  max-width: 46ch;
+}
+
+.meta {
+  margin-top: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--teal-700);
+  margin-bottom: var(--space-1);
+}
+
+/* ── calls to action ─────────────────────────────────────────────── */
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--teal-700);
+  color: #fff;
+  border-radius: var(--r-md);
+  padding: 12px var(--space-5);
+  font-size: 14.5px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-sm);
+  transition: background var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out);
+}
+
+.primaryCta:hover {
+  background: var(--teal-900);
+  transform: translateY(-1px);
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md);
+  padding: 11px var(--space-5);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: border-color var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
+}
+
+.secondaryCta:hover {
+  border-color: var(--teal-500);
+  color: var(--teal-700);
+}
+
+.tertiaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: var(--space-4);
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  transition: color var(--t-base) var(--ease-out);
+}
+
+.tertiaryCta:hover {
+  color: var(--teal-700);
+}
+
+/* ── data cards ──────────────────────────────────────────────────── */
+
+.card {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.cardSub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  letter-spacing: 0.03em;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: 6px 0;
+  border-top: 1px solid var(--border-hairline);
+  font-size: var(--fs-small);
+}
+
+.row:first-of-type {
+  border-top: 0;
+}
+
+.row span {
+  color: var(--ink-muted);
+}
+
+.row b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.row.critical b,
+.row.critical span {
+  color: var(--critical);
+}
+
+.row.critical b {
+  font-weight: 700;
+}
+
+.row.stable b {
+  color: var(--teal-700);
+}
+
+.stale {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--warning);
+  letter-spacing: 0.02em;
+}
+
+/* ── pills ───────────────────────────────────────────────────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-full);
+  padding: 2px 9px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  flex: none;
+}
+
+.pillRisk {
+  background: var(--critical-wash);
+  color: var(--critical);
+}
+
+.pillOk {
+  background: var(--stable-wash);
+  color: var(--teal-700);
+}
+
+.pillHold {
+  background: var(--warning-wash);
+  color: var(--warning);
+}
+
+/* ── care cohorts ────────────────────────────────────────────────── */
+
+.cohort {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border-hairline);
+}
+
+.cohort:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.cohortCount {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--critical);
+  min-width: 34px;
+  flex: none;
+}
+
+.cohortBody b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.cohortBody i {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+/* ── candidates ──────────────────────────────────────────────────── */
+
+.candidate {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border-hairline);
+  transition: opacity var(--t-slow) var(--ease-out);
+}
+
+.candidate:first-child {
+  border-top: 0;
+}
+
+.candidateBody {
+  min-width: 0;
+}
+
+.candidateBody b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.candidateBody i {
+  display: block;
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+.candidateOut .candidateBody b {
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+  color: var(--ink-muted);
+}
+
+/* ── justification checks ────────────────────────────────────────── */
+
+.checks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checks li {
+  position: relative;
+  padding: 5px 0 5px 22px;
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  line-height: 1.45;
+  transition: color var(--t-base) var(--ease-out);
+}
+
+.checks li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-default);
+  transition: background var(--t-base) var(--ease-out), border-color var(--t-base) var(--ease-out);
+}
+
+.checkDone {
+  color: var(--ink-soft);
+}
+
+.checkDone::before {
+  background: var(--teal-500);
+  border-color: var(--teal-500);
+}
+
+/* ── mobile ──────────────────────────────────────────────────────── */
+
+@media (max-width: 940px) {
+  .beat {
+    top: 0;
+    transform: none;
+  }
+  .lead,
+  .body,
+  .footnote {
+    max-width: none;
+  }
+  .meta {
+    display: none;
+  }
+}
+
+.h1{line-height:1.04;letter-spacing:-.045em;text-wrap:initial;max-width:650px;margin-bottom:24px}.h2{line-height:1.07;letter-spacing:-.035em;margin-bottom:20px}.kicker{font-size:12px;letter-spacing:.13em;margin-bottom:24px}.subhead{font-size:17px;letter-spacing:.03em;margin-bottom:16px}.body{font-size:18px;line-height:1.7;max-width:520px}.lead{font-size:20px;line-height:1.5}
+.primaryCta,.secondaryCta{min-height:56px;font-size:16px;padding:14px 23px;border-radius:10px}.primaryCta{background:var(--teal-900);box-shadow:0 6px 18px #0e4a421c;gap:24px}.ctaRow{margin-top:24px;gap:16px}.tertiaryCta{display:none}.meta{font-family:var(--font-body);font-size:12px;line-height:1.7;margin-top:28px;max-width:420px}
+.card{padding:20px 24px;border-color:var(--border-subtle);box-shadow:var(--shadow-md)}.cardTitle,.candidateBody b{font-size:16px}.cardSub,.pill,.stale{font-size:12px}.candidateBody i{font-size:13px}.candidate{padding:9px 0}.cohortCount{font-size:34px}.cohortBody b{font-size:16px}.cohortBody i{font-size:14px}
+@media(max-width:1200px){.body{font-size:16px}.h1{font-size:clamp(44px,4.6vw,72px)}.h2{font-size:38px}.card{padding:14px 18px}.candidate{padding:5px 0}.candidateBody i{font-size:12px}}
+@media(max-width:760px){.h1{font-size:44px;max-width:520px;margin-bottom:14px}.h2{font-size:32px}.kicker{margin-bottom:14px}.body{font-size:16px;line-height:1.55}.subhead{font-size:15px;margin-bottom:12px}.meta{margin-top:16px}.ctaRow{margin-top:14px}.primaryCta,.secondaryCta{min-height:48px;padding:10px 16px;font-size:14px}.beat{max-height:460px;overflow-y:auto;padding:8px 3px}.card{margin-top:8px}}
+
+@media(max-width:760px){.beat{max-height:100%;overflow-y:auto}.h1{font-size:clamp(32px,8.5vw,44px)}.meta{font-size:11px;margin-top:12px}.subhead{display:none}.kicker{font-size:10px;margin-bottom:10px}.body{font-size:15px}.h2{font-size:28px}.card{padding:12px}.candidateBody i{font-size:12px}.primaryCta,.secondaryCta{min-height:44px}}
