@@ -17,3 +17,48 @@
 @media(max-width:760px){.split{grid-template-columns:1fr;grid-template-rows:32vh minmax(0,1fr);gap:12px;align-items:stretch}.netCol{padding:18px 0 20px}.sceneLabel{font-size:9px}.legend{gap:10px}.legend li{font-size:9px}.copyCol,.copyWrap{height:100%}}
 
 .chapters{padding:4px 7px;border:1px solid #31593820;border-radius:30px;background:#fbfcf7}.chapters button[aria-current='step']{background:#214b35}.hint{font-size:12px;color:#6f806e}.sceneLabel{color:#657662}@media(max-width:760px){.stage{padding-top:72px}.chapters{padding:2px 5px}}
+
+.story{height:500vh}@media(max-width:760px){.story{height:600vh}}@media(prefers-reduced-motion:reduce){.story{height:420vh}}
+
+
+/* The network column was donating 52px of vertical padding to a map that was
+   already the height-constrained element. Nothing else in the stage moves. */
+.netCol { padding: 10px 0 8px; }
+@media (max-width: 760px) { .netCol { padding: 12px 0 14px; } }
+
+/* District title, network, key, and timeline each own a layout row. */
+.split{height:calc(100% - 58px);padding-top:18px;align-items:stretch}
+.netCol{padding:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:12px;min-height:0;height:100%;align-items:stretch;justify-items:stretch}
+.sceneLabel{position:static;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;line-height:1.5;letter-spacing:.07em;padding:0 4px;color:#43614c}
+.sceneLabel span{font-size:11px;color:#7b8878;letter-spacing:.03em}
+.legend{position:static;display:flex;align-items:center;flex-wrap:wrap;margin:0;padding:0 4px;gap:10px 20px;min-height:20px}
+.legend li{font-size:12px;line-height:1.5}
+.chapters{bottom:8px}.hint{bottom:18px}
+@media(max-width:760px){.split{grid-template-rows: minmax(290px,43%) minmax(0,1fr);height:calc(100% - 48px);padding-top:10px;gap:12px}.netCol{gap:7px;padding:0}.sceneLabel{font-size:11px;letter-spacing:0;flex-wrap:wrap;gap:2px 8px}.sceneLabel span{font-size:10px}.legend{gap:6px 12px}.legend li{font-size:10px}.copyWrap{min-height:0}.chapters{bottom:6px}}
+
+/* A distinct opening, followed by the existing district story on native scroll. */
+.opening{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:140px max(24px,6vw) 100px;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 52% 60%,#dbeed35e,transparent 54%),#f7f8f3}
+.opening:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,transparent calc(50% - .5px),#40654408 50%,transparent calc(50% + .5px));pointer-events:none}
+.openingContent{text-align:center;max-width:1300px;margin:auto;width:100%}.openingEyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.17em;color:#56735c;font-weight:600}.openingEyebrow i{width:7px;height:7px;border-radius:50%;background:#498766}
+.opening h1{font-size:clamp(56px,6.3vw,120px);line-height:1.02;font-weight:500;letter-spacing:-.065em;margin:34px 0 28px;text-wrap:balance}.opening h1 em{font-style:normal;color:#377653}.openingContent>p{font-size:clamp(18px,1.3vw,23px);line-height:1.7;color:#667364;margin:0 auto;max-width:620px}
+.openingActions{display:flex;justify-content:center;align-items:center;gap:24px;flex-wrap:wrap;margin-top:34px}.openingActions a{display:inline-flex;align-items:center;gap:22px;padding:17px 24px;border-radius:8px;font-size:15px;font-weight:500;min-height:54px}.openingActions a:first-child{background:#1d442f;color:#fff;box-shadow:0 8px 24px #1d442f19}.openingActions a:first-child:hover{background:#306446}.openingActions a:last-child{border:1px solid #b8c9b426;color:#43604b}.openingActions a:last-child:hover{border-color:#9eb39a}
+.openingLoop{display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap;margin:64px auto 0;color:#88977d}.openingLoop span{font-size:13px;color:#54705b;display:flex;align-items:center;gap:10px}.openingLoop b{font-size:10px;font-weight:500;color:#92a38b;border:1px solid #c8d4c2;border-radius:50%;width:25px;height:25px;display:grid;place-items:center}
+.openingBottom{position:absolute;left:6vw;right:6vw;bottom:26px;border-top:1px solid #284d3220;padding-top:22px;display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:12px;color:#7a8974}.openingBottom a{display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.12em;color:#49694f}
+@media(max-width:760px){.opening{padding:112px 24px 115px;min-height:100svh}.opening h1{font-size:clamp(48px,10vw,72px);letter-spacing:-.05em;margin:28px 0 24px}.openingEyebrow{font-size:10px;letter-spacing:.1em}.openingContent>p{font-size:17px}.openingActions{gap:8px;margin-top:26px}.openingActions a{font-size:14px;padding:14px 18px;min-height:48px}.openingLoop{gap:10px;margin-top:34px}.openingLoop span{font-size:11px;gap:6px}.openingLoop>svg{width:12px}.openingLoop b{display:none}.openingBottom{left:24px;right:24px;bottom:24px;justify-content:center}.openingBottom>span{display:none}}
+@media(prefers-reduced-motion:no-preference){.openingActions a{transition:background .2s,border-color .2s}}
+
+/* Shared atmospheric ground removes the seam between opening and district. */
+.opening{background:transparent}
+.opening:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 42%,#e5efdb65,transparent 67%)}
+.openingContent{transform-origin:50% 60%}
+.split{transform-origin:50% 35%}
+@media(prefers-reduced-motion:reduce){.openingContent,.split{transform:none!important;opacity:1!important}}
+
+/* A crisp chapter reveal replaces fading/scaling content. */
+.story{background:linear-gradient(180deg,#edf3e9 0px,#f7f8f3 460px);border-radius:36px 36px 0 0;box-shadow:0 -18px 50px -35px #214c3540}
+.chapterSeam{position:absolute;top:18px;left:6%;right:6%;display:flex;justify-content:center;align-items:center;gap:20px;pointer-events:none;z-index:3}
+.chapterSeam span{height:1px;flex:1;max-width:240px;background:linear-gradient(90deg,transparent,#88a28d70)}.chapterSeam span:last-child{transform:rotate(180deg)}
+.chapterSeam b{font-size:10px;line-height:20px;letter-spacing:.16em;font-weight:500;color:#56745c}
+.openingContent,.split{opacity:1}.openingBottom{bottom:32px}
+@media(max-width:760px){.story{border-radius:24px 24px 0 0}.chapterSeam{top:10px;gap:12px}.chapterSeam b{font-size:9px;letter-spacing:.09em}}
+@media(prefers-reduced-motion:reduce){.openingContent,.split{transform:none!important}}

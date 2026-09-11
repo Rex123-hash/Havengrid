@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { LandingScenario, TrackedItem } from '../../data/types';
 import type { FacilityState, StoryState } from '../../story/deriveStoryState';
 import { MapGround } from './MapGround';
 import {
   RGB,
-  VIEW_H,
-  VIEW_W,
   buildBlastLayout,
   diamondPath,
   hexPath,
@@ -37,7 +36,12 @@ interface HoverTarget {
  * the same district in the same place. Only *state* changes — that constancy is
  * what makes the page read as one world rather than a run of illustrations.
  */
-export function NetworkStage({ scenario, state, reducedMotion }: Props) {
+export function NetworkStage({ scenario: sourceScenario, state: sourceState, reducedMotion }: Props) {
+  // A wide presentation layout keeps the network legible in its landscape panel.
+  // Only display coordinates change; forecasts and facility identities stay intact.
+  const scenario = useMemo(() => ({...sourceScenario, facilities: sourceScenario.facilities.map(f => ({...f, y: 54 + (f.y - 78) * 0.65}))}), [sourceScenario]);
+  const state = {...sourceState, facilities: sourceState.facilities.map(fs => ({...fs, facility: scenario.facilities.find(f => f.id === fs.facility.id)!}))};
+  const [sleeveOpen, setSleeveOpen] = useState(false);
   const [hover, setHover] = useState<HoverTarget | null>(null);
   const focus = scenario.facilities.find((f) => f.id === scenario.focusFacilityId)!;
   const byId = useMemo(
@@ -71,11 +75,13 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
   const dim = Math.max(state.blastVisible, state.routeVisible * 0.72);
 
   return (
-    <div className={styles.wrap} onPointerLeave={() => setHover(null)}>
+    <div className={styles.wrap} data-sleeve-open={sleeveOpen} onPointerLeave={() => setHover(null)}>
       <div className={styles.networkHeader}><span><i /> DISTRICT NETWORK</span><b>14 facilities <em>/</em> hover to inspect</b></div>
       <svg
         className={styles.svg}
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        viewBox="65 12 865 440"
+        preserveAspectRatio="xMidYMid meet"
+        shapeRendering="geometricPrecision"
         role="img"
         aria-label={`${scenario.district} district supply network — ${scenario.facilityCount} facilities with predicted stock states`}
       >
@@ -152,6 +158,23 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
       </svg>
 
       <div className={styles.networkFooter}><span>SCHEMATIC VIEW</span><b>{state.resolved ? 'Recovery verified' : state.evidenceConfirmed ? 'Evidence updated · replanning' : state.routeVisible > .5 ? 'Intervention proposed' : 'Care-aware forecasting'}</b><span>{String(Math.round(state.horizonDay)).padStart(2,'0')}D HORIZON</span></div>
+      <aside className={styles.sleeve} data-open={sleeveOpen} aria-label="Bhatpar forecast" onKeyDown={e => {if(e.key === 'Escape') {setSleeveOpen(false); e.currentTarget.querySelector('button')?.focus();}}}>
+        <button className={styles.sleeveTab} aria-expanded={sleeveOpen} aria-controls="bhatpar-forecast" onClick={() => {setHover(null);setSleeveOpen(v => !v);}} aria-label={sleeveOpen ? 'Close Bhatpar forecast' : 'Open Bhatpar forecast'}>
+          {sleeveOpen ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          <span>{state.resolved ? 'CARE PROTECTED' : 'BHATPAR FORECAST'}</span>
+          <b>{state.resolved ? scenario.totalCareEventsExposed : `${scenario.item.breachDay}D`}</b>
+        </button>
+        <div className={styles.sleeveReveal} aria-hidden={!sleeveOpen}>
+      <div id="bhatpar-forecast" className={styles.forecast} data-resolved={state.resolved}>
+        <div className={styles.forecastHeading}><span>{focus.name}</span><i>{state.resolved ? 'VERIFIED' : 'FORECAST'}</i></div>
+        <p>{state.resolved ? 'Care continuity restored' : state.horizonDay < 1 ? 'Stock available today' : `Looking ${Math.round(state.horizonDay)} days ahead`}</p>
+        <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.breachDay}<small>{state.resolved ? 'care events protected' : 'days · predicted shortage'}</small></strong>
+        {!state.resolved && <div className={styles.forecastCare}><b>{scenario.totalCareEventsExposed}</b> future care events exposed</div>}
+        <div className={styles.stockComparison}><span>Stock <b>{scenario.item.currentStock + (state.resolved ? state.activePlan.transferUnits! : 0)}</b></span><span>14-day need <b>{scenario.item.projectedDemand}</b></span></div>
+        <span className={styles.forecastNote}>Illustrative demo · {scenario.item.name}</span>
+      </div>
+        </div>
+      </aside>
       {hover && <FacilityCard target={hover} item={scenario.item} isFocus={hover.fs.facility.id === focus.id} />}
     </div>
   );
@@ -289,7 +312,7 @@ function BlastRadius({
             key={pt.id}
             cx={origin.x + (pt.tx - origin.x) * t}
             cy={origin.y + (pt.ty - origin.y) * t}
-            r={3.6}
+            r={4.2}
             fill="var(--critical)"
             opacity={0.25 + 0.75 * t}
           />
@@ -319,7 +342,7 @@ function FacilityNode({
   onHover: (t: HoverTarget | null) => void;
 }) {
   const { facility: f, risk, transition, severity, freshness } = fs;
-  const r = nodeRadius(f.tier) * 1.22;
+  const r = nodeRadius(f.tier) * 1.4;
 
   let stroke = 'var(--mint-400)';
   let fill: string = 'var(--mint-400)';

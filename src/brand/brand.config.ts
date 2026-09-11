@@ -35,7 +35,7 @@ export const routes = {
 export const nav = {
   links: [
     { label: 'Product', href: '#story' },
-    { label: 'How it works', href: '#capabilities' },
+    { label: 'Explore features', href: '#explore-features' },
     { label: 'Impact', href: '#closing' },
   ],
   signIn: 'Sign in',

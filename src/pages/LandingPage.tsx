@@ -1,3 +1,6 @@
+import { ArrowDown, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { routes } from '../brand/brand.config';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { landingScenario } from '../data/landingScenario';
 import { deriveStoryState } from '../story/deriveStoryState';
@@ -7,6 +10,7 @@ import { Navbar } from '../components/Navbar/Navbar';
 import { NetworkStage } from '../components/NetworkStage/NetworkStage';
 import { HorizonRail } from '../components/HorizonRail/HorizonRail';
 import { SupportingBand } from '../components/SupportingBand/SupportingBand';
+import { InteractiveFeatures } from '../components/InteractiveFeatures/InteractiveFeatures';
 import { Footer } from '../components/Footer/Footer';
 import {
   ArrivalBeat,
@@ -24,6 +28,8 @@ import styles from './LandingPage.module.css';
 export default function LandingPage() {
   const storyRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const openingRef = useRef<HTMLElement>(null);
+  const [handoff, setHandoff] = useState({ exit: 0, enter: 0 });
 
   const scrollProgress = useStoryProgress(storyRef);
   const [confirmed, setConfirmed] = useState(false);
@@ -36,6 +42,29 @@ export default function LandingPage() {
   };
   const reducedMotion = usePrefersReducedMotion();
   useViewportHeight(stageRef);
+
+  // Independent of story progress: animate only the approach to the district.
+  // Native scroll remains in control and reversing direction reverses the reveal.
+  useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const opening = openingRef.current;
+      const story = storyRef.current;
+      if (!opening || !story) return;
+      const height = window.innerHeight;
+      const clamp = (v: number) => Math.min(1, Math.max(0, v));
+      const exit = clamp(-opening.getBoundingClientRect().top / (opening.offsetHeight * 0.85));
+      const t = clamp((height - story.getBoundingClientRect().top) / (height * 0.8));
+      const enter = t * t * (3 - 2 * t);
+      setHandoff(previous => Math.abs(previous.exit - exit) + Math.abs(previous.enter - enter) < 0.002 ? previous : {exit, enter});
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    measure();
+    window.addEventListener('scroll', schedule, {passive: true});
+    window.addEventListener('resize', schedule);
+    return () => {cancelAnimationFrame(frame);window.removeEventListener('scroll', schedule);window.removeEventListener('resize', schedule);};
+  }, []);
 
   /* The visitor may take the horizon off the story and sweep it themselves.
      Scrolling hands control back, so the two modes never fight. */
@@ -77,19 +106,23 @@ export default function LandingPage() {
       </div>
 
       <main id="main-content">
+        <section ref={openingRef} className={styles.opening} aria-labelledby="opening-title">
+          <div className={styles.openingContent} style={reducedMotion ? undefined : {transform: `translateY(${handoff.exit * 36}px)`}}>
+            <span className={styles.openingEyebrow}><i /> CARE-AWARE SUPPLY RESILIENCE</span>
+            <h1 id="opening-title">Tomorrow’s care.<br /><em>Protected today.</em></h1>
+            <p>See the shortage before the shelf is empty.<br />Protect the care that comes next.</p>
+            <div className={styles.openingActions}><a href="#story">See the system in action <ArrowDown size={18} /></a><Link to={routes.demo}>Explore Demo District <ArrowRight size={17} /></Link></div>
+            <div className={styles.openingLoop} aria-label="The resilience loop"><span><b>01</b> Anticipate demand</span><ArrowRight size={16} aria-hidden="true"/><span><b>02</b> Protect care</span><ArrowRight size={16} aria-hidden="true"/><span><b>03</b> Verify recovery</span></div>
+          </div>
+          <div className={styles.openingBottom}><span>Built around care continuity.</span><a href="#story">SCROLL TO ENTER THE DISTRICT <ArrowDown size={16}/></a><span>Predict · Prevent · Verify</span></div>
+        </section>
         <section id="story" ref={storyRef} className={styles.story} aria-label="How the system works">
+          <div className={styles.chapterSeam} aria-hidden="true"><span /><b>01 / ENTER THE DISTRICT</b><span /></div>
           <span id="closing" style={{position:"absolute",top:"82%"}} aria-hidden="true" />
           <div ref={stageRef} className={styles.stage}>
-            <HorizonRail
-              stops={landingScenario.horizonStops}
-              day={state.horizonDay}
-              exposed={state.careEventsExposed}
-              visible={railVisible}
-              onScrub={onScrub}
-              scrubbing={userHorizon !== null}
-            />
 
-            <div className={styles.split}>
+
+            <div className={styles.split} style={reducedMotion ? undefined : {transform: `translateY(${(1 - handoff.enter) * 70}px)`}}>
               <div className={styles.copyCol}>
                 <div className={styles.copyWrap}>
                   <ArrivalBeat opacity={stageOpacity(progress, 'arrival', 0, 0.3)} scenario={landingScenario} />
@@ -118,8 +151,17 @@ export default function LandingPage() {
               </div>
 
               <div className={styles.netCol}>
-                <p className={styles.sceneLabel}>Sundargarh, Odisha · illustrative district</p><Legend />
+                <p className={styles.sceneLabel}>Sundargarh, Odisha <span>Illustrative district</span></p>
                 <NetworkStage scenario={landingScenario} state={state} reducedMotion={reducedMotion} />
+                <Legend />
+            <HorizonRail
+              stops={landingScenario.horizonStops}
+              day={state.horizonDay}
+              exposed={state.careEventsExposed}
+              visible={railVisible}
+              onScrub={onScrub}
+              scrubbing={userHorizon !== null}
+            />
               </div>
             </div>
 
@@ -137,6 +179,7 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <InteractiveFeatures />
         <SupportingBand />
       </main>
 

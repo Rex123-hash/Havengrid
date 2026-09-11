@@ -51,7 +51,7 @@ export function ArrivalBeat({ opacity, scenario }: { opacity: number; scenario: 
   return (
     <Beat opacity={opacity} label="Introduction">
       <span className={`eyebrow ${styles.kicker}`}>{c.eyebrow}</span>
-      <h1 className={styles.h1}>Keep shortages<br />from becoming<br /><em>missed care.</em></h1>
+      <h2 className={styles.h1}>Keep shortages<br />from becoming<br /><em>missed care.</em></h2>
       <p className={styles.subhead}>{c.subhead}</p>
       <p className={styles.body}>{c.body}</p>
 
