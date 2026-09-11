@@ -120,7 +120,7 @@ export function HorizonRail({ stops, day, exposed, visible, onScrub, scrubbing =
       </div>
 
       <span className={styles.affordance} data-shown={interactive}>
-        {scrubbing ? 'Esc or scroll to resume the story' : 'Drag the horizon — or use ← →'}
+        {scrubbing ? 'Play the forecast · drag or use ← → to take control' : 'Drag the horizon — or use ← →'}
       </span>
     </div>
   );

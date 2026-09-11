@@ -1,6 +1,43 @@
-.connectionScene{position:relative;height:250vh;background:#102c24;color:#edf4e8}
-.connectionSticky{position:sticky;top:0;height:100svh;min-height:650px;display:grid;grid-template-columns:.75fr 1.25fr;gap:5vw;align-items:center;padding:110px max(6vw,24px) 75px;overflow:hidden}
-.connectionSticky:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 72% 46%,#2e6c5522,transparent 38%),linear-gradient(120deg,#102c24,#173d30);pointer-events:none}
-.connectionCopy,.connectionMap{position:relative;z-index:1}.connectionCopy{max-width:420px}.connectionCopy h2{font-size:clamp(38px,4.5vw,76px);line-height:1.06;letter-spacing:-.055em;font-weight:600;color:#eff4e7}.connectionCopy h2 em{font-style:normal;color:#b5d495}.connectionCopy>p:not(.eyebrow):not(.scrollPrompt){color:#a8c3ae;font-size:17px;line-height:1.7;margin:25px 0 42px}.connectionMap{height:min(650px,78vh);filter:drop-shadow(0 35px 50px #051b1338)}.connectionMap .wrap{height:100%;border-radius:28px;background:radial-gradient(ellipse at 45% 50%,#205242 0%,#153c30 52%,#0e2821 100%);box-shadow:inset 0 1px #bff7d926}.connectionMeter{height:5px;border-radius:5px;background:#477461;margin:15px 0 10px;overflow:hidden}.connectionMeter span{height:100%;display:block;background:#b9e69a;border-radius:5px;transition:width .15s linear}.connectionMeter b{display:block;color:#b9e69a;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;font-weight:400}.connectionSteps{display:grid;gap:14px;margin-top:50px}.connectionSteps span{display:flex;align-items:center;gap:14px;color:#709581;font-size:12px;transition:color .3s}.connectionSteps span[data-active=true]{color:#e4f0da}.connectionSteps i{display:grid;place-items:center;width:26px;height:26px;border:1px solid #567b66;border-radius:50%;font-style:normal;font-family:var(--font-mono);font-size:9px}.connectionSteps span[data-active=true] i{background:#c6e399;color:#183927;border-color:#c6e399}.scrollPrompt{display:flex;align-items:center;gap:8px;color:#86a792;font-family:var(--font-mono);font-size:10px;margin-top:70px}
-@media(max-width:700px){.connectionScene{height:210vh}.connectionSticky{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:28px;padding:105px 22px 70px;min-height:650px}.connectionCopy h2{font-size:40px}.connectionCopy>p:not(.eyebrow):not(.scrollPrompt){font-size:15px;margin:16px 0 22px}.connectionSteps{display:flex;gap:10px;margin-top:25px}.connectionSteps span{font-size:0;gap:0}.connectionSteps i{width:28px;height:28px}.scrollPrompt{margin-top:25px}.connectionMap{height:330px;flex:none;margin:0 -10px}.connectionMap .networkHeader,.connectionMap .networkFooter{display:none}.connectionMap .sleeve{display:none}}
-@media(prefers-reduced-motion:reduce){.connectionMeter span{transition:none}}
+.connectionScene { position: relative; height: 250vh; background: #102c24; color: #edf4e8; scroll-margin-top: 85px; }
+.connectionSticky { position: sticky; top: 0; height: 100svh; min-height: 650px; display: grid; grid-template-columns: .75fr 1.25fr; gap: 5vw; align-items: center; padding: 110px max(6vw,24px) 75px; overflow: hidden; }
+.connectionSticky::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 72% 46%,#2e6c5522,transparent 38%),linear-gradient(120deg,#102c24,#173d30); pointer-events: none; }
+.connectionCopy, .connectionMap { position: relative; z-index: 1; }
+.connectionCopy { max-width: 420px; }
+.connectionCopy h2 { font-size: clamp(38px,4.5vw,76px); line-height: 1.06; letter-spacing: -.055em; font-weight: 600; color: #eff4e7; }
+.connectionCopy h2 em { font-style: normal; color: #b5d495; }
+.connectionCopy > h2 + p { color: #a8c3ae; font-size: 17px; line-height: 1.7; margin: 25px 0 24px; }
+.connectionMap { height: min(650px,78vh); filter: drop-shadow(0 35px 50px #051b1338); }
+.connectionMeter { min-height: 32px; position: relative; margin: 15px 0 10px; }
+.connectionMeter::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: #477461; border-radius: 5px; }
+.connectionMeter span { position: relative; height: 5px; display: block; background: #b9e69a; border-radius: 5px; transition: width .15s linear; }
+.connectionMeter b { display: block; padding-top: 10px; line-height: 1.5; color: #b9e69a; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; font-weight: 400; }
+.connectionSteps { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 35px; }
+.connectionSteps span { display: flex; align-items: center; gap: 10px; color: #a0baa9; font-size: 12px; transition: color .3s; }
+.connectionSteps span[data-active=true] { color: #e4f0da; }
+.connectionSteps i { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #789b85; border-radius: 50%; font-style: normal; font-family: var(--font-mono); font-size: 11px; }
+.connectionSteps span[data-active=true] i { background: #c6e399; color: #183927; border-color: #c6e399; }
+.scrollPrompt { display: flex; align-items: center; gap: 8px; color: #aec6b6; font-family: var(--font-mono); font-size: 12px; margin-top: 35px; }
+@media(max-width:700px) {
+  .connectionScene { height: 210vh; }
+  .connectionSticky { display: flex; flex-direction: column; align-items: stretch; justify-content: center; height: 100svh; min-height: 0; padding: 90px 22px 65px; gap: 16px; }
+  .connectionCopy h2 { font-size: clamp(26px,4.5vh,40px); }
+  .connectionCopy > h2 + p { font-size: 12px; line-height: 1.5; margin: 12px 0; }
+  .connectionSteps { gap: 10px; margin-top: 18px; }
+  .connectionSteps span { font-size: 12px; gap: 6px; }
+  .scrollPrompt { margin-top: 18px; }
+  .connectionMap { height: auto; min-height: 170px; flex: 1; margin: 0 -10px; }
+}
+@media(min-width:701px) and (max-height:850px) {
+  .connectionSticky { min-height: 0; padding-top: 100px; padding-bottom: 70px; }
+  .connectionCopy h2 { font-size: clamp(32px,6vh,52px); }
+  .connectionCopy > h2 + p { font-size: 14px; line-height: 1.5; margin: 18px 0; }
+  .connectionMap { height: calc(100svh - 190px); }
+  .connectionSteps { margin-top: 22px; }
+  .scrollPrompt { margin-top: 24px; }
+}
+@media(max-width:700px) and (max-height:650px) {
+  .connectionScene { height: auto; }
+  .connectionSticky { position: relative; height: auto; overflow: visible; }
+  .connectionMap { height: 280px; flex: none; }
+}
+@media(prefers-reduced-motion:reduce) { .connectionMeter span { transition: none; } }

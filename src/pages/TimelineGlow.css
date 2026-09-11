@@ -1,4 +1,0 @@
-.timelineStrong li[data-done=true]{opacity:1!important;filter:drop-shadow(0 0 12px #bfe99a50)}
-.timelineStrong li[data-done=true]>span{box-shadow:0 0 0 5px #bfd89c35,0 0 26px #c5e59bb8,0 0 48px #c5e59b55!important}
-.timelineStrong li[data-done=true] b{color:#fff!important;text-shadow:0 0 18px #c5e59b99}
-.timelineStrong li[data-done=true] p{color:#d4e5c9!important;text-shadow:0 0 14px #c5e59b66}

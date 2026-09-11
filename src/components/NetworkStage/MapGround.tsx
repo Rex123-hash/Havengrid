@@ -1,10 +1,12 @@
+import { useId } from 'react';
 import styles from './NetworkStage.module.css';
 import { hexPath } from './geometry';
 /** A quiet coordinate lattice, not invented geographic boundaries or live coverage. */
 export function MapGround() {
+  const id = useId();
   return <g aria-hidden="true" className={styles.ground}>
-    <defs><radialGradient id="lattice-fade"><stop offset="20%" stopColor="white"/><stop offset="100%" stopColor="white" stopOpacity="0"/></radialGradient><mask id="lattice-mask"><ellipse cx="480" cy="310" rx="510" ry="340" fill="url(#lattice-fade)"/></mask></defs>
-    <g mask="url(#lattice-mask)">
+    <defs><radialGradient id={id + '-fade'}><stop offset="20%" stopColor="white"/><stop offset="100%" stopColor="white" stopOpacity="0"/></radialGradient><mask id={id + '-mask'}><ellipse cx="480" cy="310" rx="510" ry="340" fill={`url(#${id}-fade)`}/></mask></defs>
+    <g mask={`url(#${id}-mask)`}>
       {Array.from({length:19},(_,col)=>Array.from({length:12},(_,row)=>{
         const x=col*55,y=row*63.5+(col%2?31.75:0)-40;
         return <path key={`${col}-${row}`} d={hexPath(x,y,35)} fill="none" stroke="#85cdb3" strokeWidth=".65" opacity=".12"/>;
