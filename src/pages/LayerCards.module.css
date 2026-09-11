@@ -1,13 +1,13 @@
 .card{transform-style:preserve-3d;transform-origin:center;will-change:transform;transition:transform .8s cubic-bezier(.22,.84,.22,1),box-shadow .8s ease,filter .8s ease-out;touch-action:none;cursor:grab}
 .card[data-active=true]{z-index:20!important;transform:translate3d(var(--drag-x,0px),var(--drag-y,0px),62px) rotateX(calc(8deg + var(--drag-tilt,0deg))) rotateY(var(--drag-tilt,0deg)) rotateZ(var(--drag-rotate,0deg)) scale(1.035);transition:transform .8s cubic-bezier(.22,.84,.22,1),box-shadow .8s ease,filter .8s ease-out;box-shadow:0 5px 0 #b9ccb1,0 34px 55px #143d2a38,0 0 0 1px #f8fff0,0 0 38px #b8de9b6b;filter:saturate(1.04)}
-.card .planeTop svg{transition:transform .72s cubic-bezier(.22,.84,.22,1),filter .72s ease-out}
-.card[data-active=true] .planeTop svg{transition-duration:.72s;transition-timing-function:cubic-bezier(.22,.84,.22,1);transition-delay:.05s}
-.card[data-active=true] .planeTop svg{transform:translateZ(12px) scale(1.06);filter:drop-shadow(0 0 9px #c5e59b99)}
+.card :global([data-card-heading]) svg{transition:transform .72s cubic-bezier(.22,.84,.22,1),filter .72s ease-out}
+.card[data-active=true] :global([data-card-heading]) svg{transition-duration:.72s;transition-timing-function:cubic-bezier(.22,.84,.22,1);transition-delay:.05s}
+.card[data-active=true] :global([data-card-heading]) svg{transform:translateZ(12px) scale(1.06);filter:drop-shadow(0 0 9px #c5e59b99)}
 .card:hover:not([data-active=true]){transform:translateZ(18px) rotateX(31deg) rotateZ(-9deg) translateY(-8px) scale(1.012);box-shadow:0 8px 0 #b9ccb1,0 24px 38px #143d2a25,0 0 0 1px #eff9e6,0 0 28px #b8de9b55;filter:saturate(1.03)}
-.card:hover:not([data-active=true]) .planeTop svg{transform:translateZ(8px) scale(1.04);filter:drop-shadow(0 0 7px #c5e59b88)}
-.card:hover:not([data-active=true]) .miniBars{opacity:.55;filter:drop-shadow(0 0 5px #b8d79b88)}
+.card:hover:not([data-active=true]) :global([data-card-heading]) svg{transform:translateZ(8px) scale(1.04);filter:drop-shadow(0 0 7px #c5e59b88)}
+.card:hover:not([data-active=true]) :global([data-card-bars]){opacity:.55;filter:drop-shadow(0 0 5px #b8d79b88)}
 .card[data-dragging=true]{cursor:grabbing}
-.card[data-active=true] .miniBars{opacity:.65;filter:drop-shadow(0 0 7px #b8d79b)}
+.card[data-active=true] :global([data-card-bars]){opacity:.65;filter:drop-shadow(0 0 7px #b8d79b)}
 @media(max-width:700px){.card[data-active=true]{transform:translate3d(var(--drag-x,0px),var(--drag-y,0px),40px) rotateX(calc(7deg + var(--drag-tilt,0deg))) rotateY(var(--drag-tilt,0deg)) rotateZ(var(--drag-rotate,0deg)) scale(1.025)}}
-@media(hover:none){.card:hover:not([data-active=true]){transform:none;box-shadow:none;filter:none}.card:hover:not([data-active=true]) .planeTop svg{transform:none;filter:none}.card:hover:not([data-active=true]) .miniBars{opacity:.35;filter:none}}
-@media(prefers-reduced-motion:reduce){.card,.card .planeTop svg{transition:none}.card[data-active=true]{transform:translate3d(var(--drag-x,0px),var(--drag-y,0px),25px) rotateX(3deg) rotateZ(var(--drag-rotate,0deg)) scale(1.02)}}
+@media(hover:none){.card:hover:not([data-active=true]){transform:none;box-shadow:none;filter:none}.card:hover:not([data-active=true]) :global([data-card-heading]) svg{transform:none;filter:none}.card:hover:not([data-active=true]) :global([data-card-bars]){opacity:.35;filter:none}}
+@media(prefers-reduced-motion:reduce){.card,.card :global([data-card-heading]) svg{transition:none}.card[data-active=true]{transform:translate3d(var(--drag-x,0px),var(--drag-y,0px),25px) rotateX(3deg) rotateZ(var(--drag-rotate,0deg)) scale(1.02)}}
