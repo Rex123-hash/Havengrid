@@ -18,6 +18,8 @@ interface Props {
   scenario: LandingScenario;
   state: StoryState;
   reducedMotion: boolean;
+  /** Optional scroll-driven assembly of the district corridors. */
+  connectionProgress?: number;
 }
 
 /** Where a hovered facility's detail card should sit, in wrapper coordinates. */
@@ -36,7 +38,7 @@ interface HoverTarget {
  * the same district in the same place. Only *state* changes — that constancy is
  * what makes the page read as one world rather than a run of illustrations.
  */
-export function NetworkStage({ scenario: sourceScenario, state: sourceState, reducedMotion }: Props) {
+export function NetworkStage({ scenario: sourceScenario, state: sourceState, reducedMotion, connectionProgress = 1 }: Props) {
   // A wide presentation layout keeps the network legible in its landscape panel.
   // Only display coordinates change; forecasts and facility identities stay intact.
   const scenario = useMemo(() => ({...sourceScenario, facilities: sourceScenario.facilities.map(f => ({...f, y: 54 + (f.y - 78) * 0.65}))}), [sourceScenario]);
@@ -108,7 +110,9 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
 
         {/* ── supply corridors ─────────────────────────────────────── */}
         <g>
-          {links.map((l) => (
+          {links.map((l, index) => {
+            const lineProgress = Math.max(0, Math.min(1, connectionProgress * 1.35 - index * 0.035));
+            return (
             <path
               key={`${l.from}-${l.to}`}
               d={l.d}
@@ -116,9 +120,13 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
               stroke={l.touchesFocus ? '#81d6b4' : '#6aa58f'}
               strokeWidth={l.touchesFocus ? 2 : 1.2}
               strokeLinecap="round"
-              opacity={l.touchesFocus ? 0.85 : 0.45 - dim * 0.22}
+              opacity={(l.touchesFocus ? 0.85 : 0.45 - dim * 0.22) * Math.max(.08, lineProgress)}
+              pathLength={1}
+              strokeDasharray="1"
+              strokeDashoffset={1 - lineProgress}
             />
-          ))}
+            );
+          })}
         </g>
 
         <g opacity={state.candidatesRevealed > 0 ? 0.65 : 0}>
@@ -144,7 +152,7 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
 
         {/* ── facilities ───────────────────────────────────────────── */}
         <g>
-          {state.facilities.map((fs) => (
+          {state.facilities.map((fs, index) => (
             <FacilityNode
               key={fs.facility.id}
               fs={fs}
@@ -152,6 +160,7 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
               resolveGlow={state.resolveGlow}
               hovered={hover?.fs.facility.id === fs.facility.id}
               onHover={setHover}
+              connectionOpacity={Math.max(0, Math.min(1, connectionProgress * 1.55 - index * 0.045))}
             />
           ))}
         </g>
@@ -334,12 +343,14 @@ function FacilityNode({
   resolveGlow,
   hovered,
   onHover,
+  connectionOpacity = 1,
 }: {
   fs: FacilityState;
   isFocus: boolean;
   resolveGlow: number;
   hovered: boolean;
   onHover: (t: HoverTarget | null) => void;
+  connectionOpacity?: number;
 }) {
   const { facility: f, risk, transition, severity, freshness } = fs;
   const r = nodeRadius(f.tier) * 1.4;
@@ -386,6 +397,7 @@ function FacilityNode({
   return (
     <g
       className={styles.node}
+      opacity={Math.max(0.08, connectionOpacity)}
       data-hovered={hovered}
       tabIndex={0}
       role="img"

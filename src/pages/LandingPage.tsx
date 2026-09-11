@@ -10,16 +10,37 @@ import { deriveStoryState } from '../story/deriveStoryState';
 import { usePrefersReducedMotion } from '../hooks/useStoryProgress';
 import { routes } from '../brand/brand.config';
 import styles from './LandingPageNew.module.css';
+import './ConnectionScene.css';
 
-const chapters = [['opening','Begin'],['care','Care'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
+const chapters = [['opening','Begin'],['care','Care'],['connect','Connect'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
 const layers = [
   { label: 'Scheduled care', value: s.item.projectedDemand, unit: 'units needed', icon: CalendarDays, detail: 'Demand across the next 14 days, connected to appointments already scheduled.' },
   { label: 'Available stock', value: s.item.currentStock, unit: 'units on hand', icon: Package, detail: 'Current inventory at Bhatpar PHC. Enough for today, but not for the full care window.' },
   { label: 'Incoming supply', value: s.item.replenishmentEtaDays, unit: 'days to arrival', icon: Truck, detail: 'The next replenishment arrives after the predicted shortage on day 6.' },
 ];
 
+function useSceneProgress(ref: React.RefObject<HTMLElement>) {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      const el = ref.current;
+      if (!el) return;
+      const span = Math.max(1, el.offsetHeight - window.innerHeight);
+      setProgress(Math.max(0, Math.min(1, -el.getBoundingClientRect().top / span)));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; measure(); }); };
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', measure); };
+  }, [ref]);
+  return progress;
+}
+
 export default function LandingPage() {
   const root = useRef<HTMLElement>(null);
+  const connectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState('opening');
   const [layer, setLayer] = useState(0);
   const [cohort, setCohort] = useState(0);
@@ -29,6 +50,7 @@ export default function LandingPage() {
   const [confirmed, setConfirmed] = useState(false);
   const [step, setStep] = useState(0);
   const reducedMotion = usePrefersReducedMotion();
+  const connectionProgress = useSceneProgress(connectionRef);
   const mapState = deriveStoryState(confirmed ? .81 : mapMode === 'Supply routes' ? .59 : .3, s, day);
   const candidate = s.candidates.find(c => c.facilityId === donor)!;
   const invalidated = confirmed && donor === 'chc-d';
@@ -56,6 +78,12 @@ export default function LandingPage() {
       <div className={styles.bridge}><span>THE SIGNAL BECOMES A CONSEQUENCE</span><i/><ArrowDown size={20}/></div>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>02 / THE CARE BEHIND THE COUNT</p><h2>A shortage is never<br/>just a number.</h2><p>{s.item.projectedDemand} needed. {s.item.currentStock} available. A gap of {s.item.projectedDemand-s.item.currentStock} units puts {s.totalCareEventsExposed} scheduled care events at risk.</p></div>
       <div className={styles.impactStage}><span className={styles.giant} aria-hidden="true">44</span><div className={styles.cohorts}>{s.careCohorts.map((c,i)=><button key={c.key} onClick={()=>setCohort(i)} aria-pressed={cohort===i} data-selected={cohort===i}><span>0{i+1} / {c.label}</span><strong>{c.count}</strong><p>{c.detail}</p><ArrowRight size={22}/></button>)}</div><div className={styles.people} aria-live="polite"><div>{Array.from({length:23},(_,i)=><i key={i} data-lit={i<s.careCohorts[cohort].count}/>)}</div><p><b>{s.careCohorts[cohort].count} of {s.totalCareEventsExposed}</b> care events · {s.careCohorts[cohort].label}</p></div></div>
+    </section>
+    <section id="connect" data-scene ref={connectionRef} className="connectionScene">
+      <div className="connectionSticky">
+        <div className="connectionCopy"><p className={styles.eyebrow}>03 / BUILD THE PICTURE</p><h2>Watch the district<br/><em>come online.</em></h2><p>As the horizon opens, facilities surface, corridors connect, and one care risk becomes visible across the whole network.</p><div className="connectionMeter"><span style={{width:`${connectionProgress*100}%`}}/><b>{connectionProgress < .33 ? 'Finding facilities' : connectionProgress < .7 ? 'Tracing corridors' : 'District connected'}</b></div><div className="connectionSteps"><span data-active={connectionProgress>.08}><i>01</i>Facilities</span><span data-active={connectionProgress>.36}><i>02</i>Supply corridors</span><span data-active={connectionProgress>.72}><i>03</i>Care risk</span></div><p className="scrollPrompt"><ArrowDown size={15}/> Continue scrolling to enter the district</p></div>
+        <div className="connectionMap"><NetworkStage scenario={s} state={deriveStoryState(connectionProgress*.44, s, connectionProgress*14)} reducedMotion={reducedMotion} connectionProgress={connectionProgress}/></div>
+      </div>
     </section>
     <section id="story" data-scene className={`${styles.scene} ${styles.district}`}>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>03 / THE DISTRICT IN VIEW</p><h2>See where time<br/><em>is running short.</em></h2><p>Move the horizon. Inspect a facility. Find the point where supply stops keeping pace with care.</p></div>
