@@ -13,6 +13,7 @@ import {
   nodeRadius,
 } from './geometry';
 import styles from './NetworkStage.module.css';
+import sleeveFixStyles from './SleeveFix.module.css';
 
 interface Props {
   scenario: LandingScenario;
@@ -173,8 +174,9 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
           <span>{state.resolved ? 'CARE PROTECTED' : 'BHATPAR FORECAST'}</span>
           <b>{state.resolved ? scenario.totalCareEventsExposed : `${scenario.item.breachDay}D`}</b>
         </button>
-        <div className={styles.sleeveReveal} aria-hidden={!sleeveOpen}>
+      <div className={styles.sleeveReveal} aria-hidden={!sleeveOpen}>
       <div id="bhatpar-forecast" className={styles.forecast} data-resolved={state.resolved}>
+        {sleeveOpen && <button className={sleeveFixStyles.closeButton} aria-label="Close Bhatpar forecast" onClick={() => setSleeveOpen(false)}><ChevronRight size={18} strokeWidth={2.2} /></button>}
         <div className={styles.forecastHeading}><span>{focus.name}</span><i>{state.resolved ? 'VERIFIED' : 'FORECAST'}</i></div>
         <p>{state.resolved ? 'Care continuity restored' : state.horizonDay < 1 ? 'Stock available today' : `Looking ${Math.round(state.horizonDay)} days ahead`}</p>
         <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.breachDay}<small>{state.resolved ? 'care events protected' : 'days · predicted shortage'}</small></strong>
