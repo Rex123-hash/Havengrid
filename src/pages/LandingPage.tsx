@@ -15,6 +15,7 @@ import './ConnectionSceneFix.css';
 import './TimelineFix.css';
 import './TimelineGlow.css';
 import layerCardStyles from './LayerCards.module.css';
+import './LayerLayoutFix.css';
 
 const chapters = [['opening','Begin'],['care','Care'],['connect','Connect'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
 const layers = [
@@ -60,6 +61,15 @@ export default function LandingPage() {
   const recoveryProgress = useSceneProgress(closingRef);
   const mapState = deriveStoryState(confirmed ? .81 : mapMode === 'Supply routes' ? .59 : .3, s, day);
   const displayedLayer = layer ?? 0;
+  useEffect(() => {
+    if (layer === null) return;
+    const resetOnOutsidePress = (event: PointerEvent) => {
+      const target = event.target as Element | null;
+      if (!target?.closest('[data-layer-card="true"]')) setLayer(null);
+    };
+    document.addEventListener('pointerdown', resetOnOutsidePress);
+    return () => document.removeEventListener('pointerdown', resetOnOutsidePress);
+  }, [layer]);
   const candidate = s.candidates.find(c => c.facilityId === donor)!;
   const invalidated = confirmed && donor === 'chc-d';
   const revised = confirmed && donor === 'chc-b';
@@ -79,9 +89,9 @@ export default function LandingPage() {
   return <><Navbar/><main ref={root} id="main-content" className={styles.experience}>
     <section id="opening" data-scene className={`${styles.scene} ${styles.opening}`}>
       <div className={styles.heroCopy}><p className={styles.eyebrow}>CARE-AWARE SUPPLY RESILIENCE</p><h1>Tomorrow’s care.<br/><em>Protected today.</em></h1><p className={styles.lead}>A full shelf today can hide a shortage tomorrow. See what care will need next—and act while there’s still time.</p><a className={styles.primary} href="#care">Follow one care journey <ArrowDown size={19}/></a><p className={styles.caption}>Sundargarh, Odisha · Illustrative district</p></div>
-      <div className={styles.layerScene} onClick={e => { if (!(e.target as HTMLElement).closest('button')) setLayer(null); }}><div className={styles.orbit}/><div className={styles.layerStack}>
-        {layers.map((l,i) => <button key={l.label} aria-pressed={layer === i} onClick={() => setLayer(i)} onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); setLayer(i); setDrag({ index:i, startX:e.clientX, startY:e.clientY, x:0, y:0, rotate:0, tilt:0 }); }} onPointerMove={e => { if (drag.index !== i) return; const x = Math.max(-70, Math.min(70, e.clientX - drag.startX)); const y = Math.max(-44, Math.min(44, e.clientY - drag.startY)); setDrag(d => ({...d, x, y, rotate:Math.max(-7,Math.min(7,x/16)), tilt:Math.max(-7,Math.min(7,-y/13))})); }} onPointerUp={e => { if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); setDrag(d => ({...d, index:-1, x:0, y:0, rotate:0, tilt:0})); }} onPointerCancel={() => setDrag(d => ({...d, index:-1, x:0, y:0, rotate:0, tilt:0}))} className={`${styles.plane} ${layerCardStyles.card}`} data-selected={layer===i} data-active={layer===i} data-dragging={drag.index===i} style={{'--i':i,'--drag-x':`${drag.index===i?drag.x:0}px`,'--drag-y':`${drag.index===i?drag.y:0}px`,'--drag-rotate':`${drag.index===i?drag.rotate:0}deg`,'--drag-tilt':`${drag.index===i?drag.tilt:0}deg`} as React.CSSProperties}><span className={styles.planeTop}><l.icon size={24}/><span>0{i+1} / {l.label}</span><ArrowRight size={19}/></span><strong>{l.value}<small>{l.unit}</small></strong><span className={styles.miniBars}>{Array.from({length:14},(_,j)=><i key={j} style={{height:`${24+((j*17+i*11)%48)}px`}}/>)}</span></button>)}
-      </div><div className={styles.layerNote} aria-live="polite"><Layers3 size={19}/><p><b>{layers[displayedLayer].label}</b>{layers[displayedLayer].detail}</p></div></div>
+      <div className={styles.layerScene} onClick={e => { if (!(e.target as HTMLElement).closest('button')) setLayer(null); }}><div className={styles.orbit}/><div className={styles.layerStack} data-layer-stack>
+        {layers.map((l,i) => <button key={l.label} aria-pressed={layer === i} data-layer-card="true" onClick={() => setLayer(i)} onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); setLayer(i); setDrag({ index:i, startX:e.clientX, startY:e.clientY, x:0, y:0, rotate:0, tilt:0 }); }} onPointerMove={e => { if (drag.index !== i) return; const x = Math.max(-70, Math.min(70, e.clientX - drag.startX)); const y = Math.max(-44, Math.min(44, e.clientY - drag.startY)); setDrag(d => ({...d, x, y, rotate:Math.max(-7,Math.min(7,x/16)), tilt:Math.max(-7,Math.min(7,-y/13))})); }} onPointerUp={e => { if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); setDrag(d => ({...d, index:-1, x:0, y:0, rotate:0, tilt:0})); }} onPointerCancel={() => setDrag(d => ({...d, index:-1, x:0, y:0, rotate:0, tilt:0}))} className={`${styles.plane} ${layerCardStyles.card}`} data-selected={layer===i} data-active={layer===i} data-dragging={drag.index===i} style={{'--i':i,'--drag-x':`${drag.index===i?drag.x:0}px`,'--drag-y':`${drag.index===i?drag.y:0}px`,'--drag-rotate':`${drag.index===i?drag.rotate:0}deg`,'--drag-tilt':`${drag.index===i?drag.tilt:0}deg`} as React.CSSProperties}><span className={styles.planeTop}><l.icon size={24}/><span>0{i+1} / {l.label}</span><ArrowRight size={19}/></span><strong>{l.value}<small>{l.unit}</small></strong><span className={styles.miniBars}>{Array.from({length:14},(_,j)=><i key={j} style={{height:`${24+((j*17+i*11)%48)}px`}}/>)}</span></button>)}
+      </div><div className={styles.layerNote} data-layer-note aria-live="polite"><Layers3 size={19}/><p><b>{layers[displayedLayer].label}</b>{layers[displayedLayer].detail}</p></div></div>
       <div className={styles.heroFoot}><span>01 — See the signals together</span><a href="#care">Discover the gap <ArrowDown size={16}/></a></div>
     </section>
     <section id="care" data-scene className={`${styles.scene} ${styles.consequence}`}>
