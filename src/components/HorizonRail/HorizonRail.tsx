@@ -1,5 +1,7 @@
 import { useCallback, useRef } from 'react';
+import { Pause, Play } from 'lucide-react';
 import styles from './HorizonRail.module.css';
+import playStyles from './HorizonPlay.module.css';
 
 interface Props {
   stops: number[];
@@ -15,6 +17,8 @@ interface Props {
   onScrub?: (day: number | null) => void;
   /** True while the visitor is steering rather than the scroll. */
   scrubbing?: boolean;
+  playing?: boolean;
+  onPlayToggle?: () => void;
 }
 
 /**
@@ -28,7 +32,7 @@ interface Props {
  * because the whole argument of the product is that time-to-failure is
  * something an operator should be able to interrogate, not just watch.
  */
-export function HorizonRail({ stops, day, exposed, visible, onScrub, scrubbing = false }: Props) {
+export function HorizonRail({ stops, day, exposed, visible, onScrub, scrubbing = false, playing = false, onPlayToggle }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
   const max = stops[stops.length - 1];
   const pct = (day / max) * 100;
@@ -81,6 +85,7 @@ export function HorizonRail({ stops, day, exposed, visible, onScrub, scrubbing =
     <div className={styles.rail} style={{ opacity: visible }} aria-hidden={visible < 0.4}>
       <div className={styles.box} data-scrubbing={scrubbing}>
         <span className={styles.caption}>HORIZON</span>
+        {onPlayToggle && <button type="button" className={playStyles.playButton} onClick={onPlayToggle} aria-pressed={playing} aria-label={playing ? 'Pause horizon playback' : 'Play horizon playback'}>{playing ? <Pause size={13} fill="currentColor" /> : <Play size={13} fill="currentColor" />}<span>{playing ? 'Pause' : 'Play'}</span></button>}
 
         <div
           ref={trackRef}

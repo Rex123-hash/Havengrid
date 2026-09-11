@@ -52,6 +52,7 @@ export default function LandingPage() {
   const [drag, setDrag] = useState({ index: -1, startX: 0, startY: 0, x: 0, y: 0, rotate: 0, tilt: 0 });
   const [cohort, setCohort] = useState(0);
   const [day, setDay] = useState(7);
+  const [horizonPlaying, setHorizonPlaying] = useState(false);
   const [mapMode, setMapMode] = useState('Risk');
   const [donor, setDonor] = useState('chc-d');
   const [confirmed, setConfirmed] = useState(false);
@@ -59,6 +60,21 @@ export default function LandingPage() {
   const reducedMotion = usePrefersReducedMotion();
   const connectionProgress = useSceneProgress(connectionRef);
   const recoveryProgress = useSceneProgress(closingRef);
+  useEffect(() => {
+    if (!horizonPlaying) return;
+    const startDay = day;
+    const startedAt = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      const raw = Math.min(1, (now - startedAt) / 5600);
+      const eased = raw * raw * (3 - 2 * raw);
+      setDay(startDay + (30 - startDay) * eased);
+      if (raw < 1) frame = requestAnimationFrame(tick);
+      else setHorizonPlaying(false);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [horizonPlaying]);
   const mapState = deriveStoryState(confirmed ? .81 : mapMode === 'Supply routes' ? .59 : .3, s, day);
   const displayedLayer = layer ?? 0;
   useEffect(() => {
@@ -110,7 +126,7 @@ export default function LandingPage() {
       <div className={styles.mapMeta}><span>SUNDARGARH, ODISHA <small>ILLUSTRATIVE DISTRICT</small></span><div className={styles.segment}>{['Risk','Supply routes','Freshness'].map(m=><button key={m} aria-pressed={mapMode===m} onClick={()=>setMapMode(m)}>{m}</button>)}</div></div>
       <div className={styles.mapFrame}><NetworkStage scenario={s} state={mapState} reducedMotion={reducedMotion}/></div>
       <div className={styles.legend}><span><i/>On track</span><span><i/>Tight</span><span><i/>Breach</span><span><i/>No forecast</span></div>
-      <HorizonRail stops={s.horizonStops} day={day} exposed={mapState.careEventsExposed} visible={1} onScrub={d=>setDay(d??7)} scrubbing/>
+      <HorizonRail stops={s.horizonStops} day={day} exposed={mapState.careEventsExposed} visible={1} onScrub={d=>{setHorizonPlaying(false);setDay(d??7)}} playing={horizonPlaying} onPlayToggle={()=>setHorizonPlaying(v=>!v)} scrubbing/>
       {mapMode==='Freshness' && <div className={styles.freshness}>{s.facilities.map(f=><span key={f.id}><b>{f.short}</b>{f.daysSinceVerified}d since verified</span>)}</div>}
     </section>
     <section id="explore-features" data-scene className={`${styles.scene} ${styles.intervention}`}>
