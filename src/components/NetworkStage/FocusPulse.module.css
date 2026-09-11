@@ -1,0 +1,3 @@
+.focusRing{animation:focusPulse 2.4s ease-in-out infinite;vector-effect:non-scaling-stroke}
+@keyframes focusPulse{0%,100%{opacity:.46;stroke-dashoffset:0}50%{opacity:1;stroke-dashoffset:8}}
+@media(prefers-reduced-motion:reduce){.focusRing{animation:none;opacity:.8}}

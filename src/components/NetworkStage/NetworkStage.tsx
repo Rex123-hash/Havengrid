@@ -14,6 +14,7 @@ import {
 } from './geometry';
 import styles from './NetworkStage.module.css';
 import sleeveFixStyles from './SleeveFix.module.css';
+import focusPulseStyles from './FocusPulse.module.css';
 
 interface Props {
   scenario: LandingScenario;
@@ -137,7 +138,7 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
           })}
         </g>
         <circle cx={focus.x} cy={focus.y} r={37} fill={state.resolved ? 'url(#bloom-resolve)' : 'url(#bloom-watch)'} />
-        <circle cx={focus.x} cy={focus.y} r={25} fill="none" stroke={state.resolved ? 'var(--teal-500)' : 'var(--warning)'} strokeWidth={1.5} strokeDasharray="3 5" />
+        <circle className={focusPulseStyles.focusRing} cx={focus.x} cy={focus.y} r={25} fill="none" stroke={state.resolved ? 'var(--teal-500)' : 'var(--warning)'} strokeWidth={1.5} strokeDasharray="3 5" />
         {/* ── the intervention route, drawn by scroll progress ─────── */}
         <RoutePath d={routeD} progress={state.routeProgress} visible={state.routeVisible} />
 
