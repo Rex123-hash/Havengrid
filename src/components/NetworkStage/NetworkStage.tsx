@@ -39,8 +39,6 @@ interface HoverTarget {
  */
 export function NetworkStage({ scenario, state, reducedMotion }: Props) {
   const [hover, setHover] = useState<HoverTarget | null>(null);
-  const [selected, setSelected] = useState<HoverTarget | null>(null);
-  const detail = selected ? {...selected, fs: state.facilities.find(f => f.facility.id === selected.fs.facility.id)!} : hover;
   const focus = scenario.facilities.find((f) => f.id === scenario.focusFacilityId)!;
   const byId = useMemo(
     () => Object.fromEntries(scenario.facilities.map((f) => [f.id, f])),
@@ -74,7 +72,7 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
 
   return (
     <div className={styles.wrap} onPointerLeave={() => setHover(null)}>
-      <div className={styles.networkHeader}><span><i /> DISTRICT NETWORK</span><b>14 facilities <em>/</em> select a facility</b></div>
+      <div className={styles.networkHeader}><span><i /> DISTRICT NETWORK</span><b>14 facilities <em>/</em> hover to inspect</b></div>
       <svg
         className={styles.svg}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -148,22 +146,13 @@ export function NetworkStage({ scenario, state, reducedMotion }: Props) {
               resolveGlow={state.resolveGlow}
               hovered={hover?.fs.facility.id === fs.facility.id}
               onHover={setHover}
-              onSelect={setSelected}
             />
           ))}
         </g>
       </svg>
 
       <div className={styles.networkFooter}><span>SCHEMATIC VIEW</span><b>{state.resolved ? 'Recovery verified' : state.evidenceConfirmed ? 'Evidence updated · replanning' : state.routeVisible > .5 ? 'Intervention proposed' : 'Care-aware forecasting'}</b><span>{String(Math.round(state.horizonDay)).padStart(2,'0')}D HORIZON</span></div>
-      <div className={styles.forecast} data-resolved={state.resolved}>
-        <div className={styles.forecastHeading}><span>{focus.name}</span><i>{state.resolved ? 'VERIFIED' : 'FORECAST'}</i></div>
-        <p>{state.resolved ? 'Care continuity restored' : state.horizonDay < 1 ? 'Stock available today' : `Looking ${Math.round(state.horizonDay)} days ahead`}</p>
-        <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.breachDay}<small>{state.resolved ? 'care events protected' : 'day forecast · shortage predicted'}</small></strong>
-        {!state.resolved && <div className={styles.forecastCare}><b>{scenario.totalCareEventsExposed}</b> future care events exposed</div>}
-        <div className={styles.stockComparison}><span>Stock <b>{scenario.item.currentStock + (state.resolved ? state.activePlan.transferUnits! : 0)}</b></span><span>14-day need <b>{scenario.item.projectedDemand}</b></span></div>
-        <span className={styles.forecastNote}>Illustrative demo · {scenario.item.name}</span>
-      </div>
-      {detail && <div className={styles.selectedDetail}><button onClick={() => {setSelected(null);setHover(null);}} aria-label="Close facility details">×</button><FacilityCard target={detail} item={scenario.item} isFocus={detail.fs.facility.id === focus.id} /></div>}
+      {hover && <FacilityCard target={hover} item={scenario.item} isFocus={hover.fs.facility.id === focus.id} />}
     </div>
   );
 }
@@ -322,14 +311,12 @@ function FacilityNode({
   resolveGlow,
   hovered,
   onHover,
-  onSelect,
 }: {
   fs: FacilityState;
   isFocus: boolean;
   resolveGlow: number;
   hovered: boolean;
   onHover: (t: HoverTarget | null) => void;
-  onSelect: (t: HoverTarget | null) => void;
 }) {
   const { facility: f, risk, transition, severity, freshness } = fs;
   const r = nodeRadius(f.tier) * 1.22;
@@ -378,11 +365,10 @@ function FacilityNode({
       className={styles.node}
       data-hovered={hovered}
       tabIndex={0}
-      role="button"
-      onClick={() => onSelect({fs, x:0, y:0, flip:false})}
-      onKeyDown={e => {if(e.key === "Enter" || e.key === " "){e.preventDefault();onSelect({fs,x:0,y:0,flip:false});}}}
+      role="img"
       aria-label={`${f.name} — ${risk === 'unknown' ? 'no forecast available' : risk === 'breach' ? `predicted breach on day ${fs.effectiveBreachDay}` : risk === 'watch' ? `tight, predicted breach on day ${fs.effectiveBreachDay}` : 'on track'}`}
       onPointerEnter={enter}
+      onPointerLeave={() => onHover(null)}
       onFocus={enter}
       onBlur={() => onHover(null)}
     >
