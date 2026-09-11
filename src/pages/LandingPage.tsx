@@ -13,6 +13,7 @@ import styles from './LandingPageNew.module.css';
 import './ConnectionScene.css';
 import './ConnectionSceneFix.css';
 import './TimelineFix.css';
+import './TimelineGlow.css';
 
 const chapters = [['opening','Begin'],['care','Care'],['connect','Connect'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
 const layers = [
@@ -60,7 +61,7 @@ export default function LandingPage() {
   const invalidated = confirmed && donor === 'chc-d';
   const revised = confirmed && donor === 'chc-b';
   const reason = invalidated ? 'Field count is below the donor safety floor. This source can no longer release stock.' : revised ? s.replan.reason : candidate.reason;
-  const scrollStep = confirmed ? Math.min(s.verification.length, Math.floor(recoveryProgress * (s.verification.length + 1))) : 0;
+  const scrollStep = Math.min(s.verification.length, Math.floor(recoveryProgress * (s.verification.length + 1)));
   const shownStep = Math.max(step, scrollStep);
   const complete = shownStep === s.verification.length;
   useEffect(() => {
