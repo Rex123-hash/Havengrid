@@ -1,209 +1,83 @@
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDown, ArrowRight, Check, Layers3, Package, CalendarDays, Truck, ScanLine, ShieldCheck, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { routes } from '../brand/brand.config';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { landingScenario } from '../data/landingScenario';
-import { deriveStoryState } from '../story/deriveStoryState';
-import { STAGES, STAGE_ORDER, stageOpacity } from '../story/stages';
-import { usePrefersReducedMotion, useStoryProgress, useViewportHeight } from '../hooks/useStoryProgress';
 import { Navbar } from '../components/Navbar/Navbar';
+import { Footer } from '../components/Footer/Footer';
 import { NetworkStage } from '../components/NetworkStage/NetworkStage';
 import { HorizonRail } from '../components/HorizonRail/HorizonRail';
-import { SupportingBand } from '../components/SupportingBand/SupportingBand';
-import { InteractiveFeatures } from '../components/InteractiveFeatures/InteractiveFeatures';
-import { Footer } from '../components/Footer/Footer';
-import {
-  ArrivalBeat,
-  BlastBeat,
-  BreachBeat,
-  CandidatesBeat,
-  ClosingBeat,
-  HorizonBeat,
-  InterventionBeat,
-  RealityLensBeat,
-  RecoveryBeat,
-} from '../story/beats/Beats';
-import styles from './LandingPage.module.css';
+import { landingScenario as s } from '../data/landingScenario';
+import { deriveStoryState } from '../story/deriveStoryState';
+import { usePrefersReducedMotion } from '../hooks/useStoryProgress';
+import { routes } from '../brand/brand.config';
+import styles from './LandingPageNew.module.css';
+
+const chapters = [['opening','Begin'],['care','Care'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
+const layers = [
+  { label: 'Scheduled care', value: s.item.projectedDemand, unit: 'units needed', icon: CalendarDays, detail: 'Demand across the next 14 days, connected to appointments already scheduled.' },
+  { label: 'Available stock', value: s.item.currentStock, unit: 'units on hand', icon: Package, detail: 'Current inventory at Bhatpar PHC. Enough for today, but not for the full care window.' },
+  { label: 'Incoming supply', value: s.item.replenishmentEtaDays, unit: 'days to arrival', icon: Truck, detail: 'The next replenishment arrives after the predicted shortage on day 6.' },
+];
 
 export default function LandingPage() {
-  const storyRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const openingRef = useRef<HTMLElement>(null);
-  const [handoff, setHandoff] = useState({ exit: 0, enter: 0 });
-
-  const scrollProgress = useStoryProgress(storyRef);
+  const root = useRef<HTMLElement>(null);
+  const [active, setActive] = useState('opening');
+  const [layer, setLayer] = useState(0);
+  const [cohort, setCohort] = useState(0);
+  const [day, setDay] = useState(7);
+  const [mapMode, setMapMode] = useState('Risk');
+  const [donor, setDonor] = useState('chc-d');
   const [confirmed, setConfirmed] = useState(false);
-  const progress = !confirmed && scrollProgress >= 0.705 ? 0.705 : scrollProgress;
-  useEffect(() => { if (scrollProgress < 0.63) setConfirmed(false); }, [scrollProgress]);
-  const confirmEvidence = () => {
-    setConfirmed(true);
-    const el = storyRef.current;
-    if (el) window.scrollTo({top: el.offsetTop + (el.offsetHeight - window.innerHeight) * 0.743, behavior:'instant'});
-  };
+  const [step, setStep] = useState(0);
   const reducedMotion = usePrefersReducedMotion();
-  useViewportHeight(stageRef);
-
-  // Independent of story progress: animate only the approach to the district.
-  // Native scroll remains in control and reversing direction reverses the reveal.
+  const mapState = deriveStoryState(confirmed ? .81 : mapMode === 'Supply routes' ? .59 : .3, s, day);
+  const candidate = s.candidates.find(c => c.facilityId === donor)!;
+  const invalidated = confirmed && donor === 'chc-d';
+  const revised = confirmed && donor === 'chc-b';
+  const reason = invalidated ? 'Field count is below the donor safety floor. This source can no longer release stock.' : revised ? s.replan.reason : candidate.reason;
+  const complete = step === s.verification.length;
   useEffect(() => {
-    let frame = 0;
-    const measure = () => {
-      frame = 0;
-      const opening = openingRef.current;
-      const story = storyRef.current;
-      if (!opening || !story) return;
-      const height = window.innerHeight;
-      const clamp = (v: number) => Math.min(1, Math.max(0, v));
-      const exit = clamp(-opening.getBoundingClientRect().top / (opening.offsetHeight * 0.85));
-      const t = clamp((height - story.getBoundingClientRect().top) / (height * 0.8));
-      const enter = t * t * (3 - 2 * t);
-      setHandoff(previous => Math.abs(previous.exit - exit) + Math.abs(previous.enter - enter) < 0.002 ? previous : {exit, enter});
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
-    measure();
-    window.addEventListener('scroll', schedule, {passive: true});
-    window.addEventListener('resize', schedule);
-    return () => {cancelAnimationFrame(frame);window.removeEventListener('scroll', schedule);window.removeEventListener('resize', schedule);};
+    const sections = root.current?.querySelectorAll<HTMLElement>('[data-scene]');
+    if (!sections) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add(styles.entered); setActive(entry.target.id); } });
+    }, { rootMargin: '-20% 0px -35% 0px', threshold: 0 });
+    sections.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
-
-  /* The visitor may take the horizon off the story and sweep it themselves.
-     Scrolling hands control back, so the two modes never fight. */
-  const [userHorizon, setUserHorizon] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (userHorizon === null) return;
-    const release = () => setUserHorizon(null);
-    window.addEventListener('wheel', release, { passive: true });
-    window.addEventListener('touchmove', release, { passive: true });
-    window.addEventListener('keydown', onPageKey);
-    function onPageKey(e: KeyboardEvent) {
-      if (e.key === 'PageDown' || e.key === 'PageUp' || e.key === ' ') release();
-    }
-    return () => {
-      window.removeEventListener('wheel', release);
-      window.removeEventListener('touchmove', release);
-      window.removeEventListener('keydown', onPageKey);
-    };
-  }, [userHorizon]);
-
-  const onScrub = useCallback((day: number | null) => setUserHorizon(day), []);
-
-  // One value in, the entire story out. Every visual below is a pure read of
-  // this object, which is what makes the whole page reversible.
-  const state = deriveStoryState(progress, landingScenario, userHorizon);
-
-  // The rail appears once the horizon becomes relevant and rides out the story.
-  const railVisible = 1;
-
-  return (
-    <>
-      <Navbar />
-
-      <div className={styles.aurora} aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
-
-      <main id="main-content">
-        <section ref={openingRef} className={styles.opening} aria-labelledby="opening-title">
-          <div className={styles.openingContent} style={reducedMotion ? undefined : {transform: `translateY(${handoff.exit * 36}px)`}}>
-            <span className={styles.openingEyebrow}><i /> CARE-AWARE SUPPLY RESILIENCE</span>
-            <h1 id="opening-title">Tomorrow’s care.<br /><em>Protected today.</em></h1>
-            <p>See the shortage before the shelf is empty.<br />Protect the care that comes next.</p>
-            <div className={styles.openingActions}><a href="#story">See the system in action <ArrowDown size={18} /></a><Link to={routes.demo}>Explore Demo District <ArrowRight size={17} /></Link></div>
-            <div className={styles.openingLoop} aria-label="The resilience loop"><span><b>01</b> Anticipate demand</span><ArrowRight size={16} aria-hidden="true"/><span><b>02</b> Protect care</span><ArrowRight size={16} aria-hidden="true"/><span><b>03</b> Verify recovery</span></div>
-          </div>
-          <div className={styles.openingBottom}><span>Built around care continuity.</span><a href="#story">SCROLL TO ENTER THE DISTRICT <ArrowDown size={16}/></a><span>Predict · Prevent · Verify</span></div>
-        </section>
-        <section id="story" ref={storyRef} className={styles.story} aria-label="How the system works">
-          <div className={styles.chapterSeam} aria-hidden="true"><span /><b>01 / ENTER THE DISTRICT</b><span /></div>
-          <span id="closing" style={{position:"absolute",top:"82%"}} aria-hidden="true" />
-          <div ref={stageRef} className={styles.stage}>
-
-
-            <div className={styles.split} style={reducedMotion ? undefined : {transform: `translateY(${(1 - handoff.enter) * 70}px)`}}>
-              <div className={styles.copyCol}>
-                <div className={styles.copyWrap}>
-                  <ArrivalBeat opacity={stageOpacity(progress, 'arrival', 0, 0.3)} scenario={landingScenario} />
-                  <HorizonBeat opacity={stageOpacity(progress, 'horizon')} />
-                  <BreachBeat opacity={stageOpacity(progress, 'breach')} scenario={landingScenario} />
-                  <BlastBeat opacity={stageOpacity(progress, 'blast')} scenario={landingScenario} />
-                  <CandidatesBeat
-                    opacity={stageOpacity(progress, 'candidates')}
-                    scenario={landingScenario}
-                    revealed={state.candidatesRevealed}
-                  />
-                  <InterventionBeat
-                    opacity={stageOpacity(progress, 'intervention')}
-                    state={state}
-                    scenario={landingScenario}
-                  />
-                  <RealityLensBeat
-                    onConfirm={confirmEvidence}
-                    opacity={stageOpacity(progress, 'realityLens')}
-                    scenario={landingScenario}
-                    state={state}
-                  />
-                  <RecoveryBeat opacity={stageOpacity(progress, 'recovery')} scenario={landingScenario} state={state} />
-                  <ClosingBeat opacity={stageOpacity(progress, 'closing', 0.18, 0)} scenario={landingScenario} />
-                </div>
-              </div>
-
-              <div className={styles.netCol}>
-                <p className={styles.sceneLabel}>Sundargarh, Odisha <span>Illustrative district</span></p>
-                <NetworkStage scenario={landingScenario} state={state} reducedMotion={reducedMotion} />
-                <Legend />
-            <HorizonRail
-              stops={landingScenario.horizonStops}
-              day={state.horizonDay}
-              exposed={state.careEventsExposed}
-              visible={railVisible}
-              onScrub={onScrub}
-              scrubbing={userHorizon !== null}
-            />
-              </div>
-            </div>
-
-            <nav className={styles.chapters} aria-label="Story chapters">
-              {STAGE_ORDER.map((key,i)=><button key={key} aria-label={`Chapter ${i+1}: ${key.replace(/([A-Z])/g,' $1')}`} aria-current={progress >= STAGES[key][0] && progress < STAGES[key][1] ? 'step' : undefined} onClick={()=>{
-                setUserHorizon(null);
-                const el=storyRef.current;
-                if(el) window.scrollTo({top:el.offsetTop+(el.offsetHeight-window.innerHeight)*(STAGES[key][0]+(key==='arrival'?0:.025)),behavior:reducedMotion?'instant':'smooth'});
-              }}>{String(i+1).padStart(2,'0')}</button>)}
-            </nav>
-            <p className={styles.hint} style={{ opacity: Math.max(0, 1 - progress / 0.03) }} aria-hidden="true">
-              <span>Scroll to follow one intervention</span>
-              <b />
-            </p>
-          </div>
-        </section>
-
-        <InteractiveFeatures />
-        <SupportingBand />
-      </main>
-
-      <Footer />
-    </>
-  );
-}
-
-/** Legend for the facility-state encoding. `no forecast` is the important one. */
-function Legend() {
-  return (
-    <ul className={styles.legend} aria-hidden="true">
-      <li>
-        <i data-state="stable" /> on track
-      </li>
-      <li>
-        <i data-state="watch" /> tight
-      </li>
-      <li>
-        <i data-state="breach" /> breach
-      </li>
-      <li>
-        <i data-state="unknown" /> no forecast
-      </li>
-    </ul>
-  );
+  return <><Navbar/><main ref={root} id="main-content" className={styles.experience}>
+    <section id="opening" data-scene className={`${styles.scene} ${styles.opening}`}>
+      <div className={styles.heroCopy}><p className={styles.eyebrow}>CARE-AWARE SUPPLY RESILIENCE</p><h1>Tomorrow’s care.<br/><em>Protected today.</em></h1><p className={styles.lead}>A full shelf today can hide a shortage tomorrow. See what care will need next—and act while there’s still time.</p><a className={styles.primary} href="#care">Follow one care journey <ArrowDown size={19}/></a><p className={styles.caption}>Sundargarh, Odisha · Illustrative district</p></div>
+      <div className={styles.layerScene}><div className={styles.orbit}/><div className={styles.layerStack}>
+        {layers.map((l,i) => <button key={l.label} aria-pressed={layer === i} onClick={() => setLayer(i)} className={styles.plane} data-selected={layer===i} style={{'--i':i} as React.CSSProperties}><span className={styles.planeTop}><l.icon size={24}/><span>0{i+1} / {l.label}</span><ArrowRight size={19}/></span><strong>{l.value}<small>{l.unit}</small></strong><span className={styles.miniBars}>{Array.from({length:14},(_,j)=><i key={j} style={{height:`${24+((j*17+i*11)%48)}px`}}/>)}</span></button>)}
+      </div><div className={styles.layerNote} aria-live="polite"><Layers3 size={19}/><p><b>{layers[layer].label}</b>{layers[layer].detail}</p></div></div>
+      <div className={styles.heroFoot}><span>01 — See the signals together</span><a href="#care">Discover the gap <ArrowDown size={16}/></a></div>
+    </section>
+    <section id="care" data-scene className={`${styles.scene} ${styles.consequence}`}>
+      <div className={styles.bridge}><span>THE SIGNAL BECOMES A CONSEQUENCE</span><i/><ArrowDown size={20}/></div>
+      <div className={styles.sectionHead}><p className={styles.eyebrow}>02 / THE CARE BEHIND THE COUNT</p><h2>A shortage is never<br/>just a number.</h2><p>{s.item.projectedDemand} needed. {s.item.currentStock} available. A gap of {s.item.projectedDemand-s.item.currentStock} units puts {s.totalCareEventsExposed} scheduled care events at risk.</p></div>
+      <div className={styles.impactStage}><span className={styles.giant} aria-hidden="true">44</span><div className={styles.cohorts}>{s.careCohorts.map((c,i)=><button key={c.key} onClick={()=>setCohort(i)} aria-pressed={cohort===i} data-selected={cohort===i}><span>0{i+1} / {c.label}</span><strong>{c.count}</strong><p>{c.detail}</p><ArrowRight size={22}/></button>)}</div><div className={styles.people} aria-live="polite"><div>{Array.from({length:23},(_,i)=><i key={i} data-lit={i<s.careCohorts[cohort].count}/>)}</div><p><b>{s.careCohorts[cohort].count} of {s.totalCareEventsExposed}</b> care events · {s.careCohorts[cohort].label}</p></div></div>
+    </section>
+    <section id="story" data-scene className={`${styles.scene} ${styles.district}`}>
+      <div className={styles.sectionHead}><p className={styles.eyebrow}>03 / THE DISTRICT IN VIEW</p><h2>See where time<br/><em>is running short.</em></h2><p>Move the horizon. Inspect a facility. Find the point where supply stops keeping pace with care.</p></div>
+      <div className={styles.mapMeta}><span>SUNDARGARH, ODISHA <small>ILLUSTRATIVE DISTRICT</small></span><div className={styles.segment}>{['Risk','Supply routes','Freshness'].map(m=><button key={m} aria-pressed={mapMode===m} onClick={()=>setMapMode(m)}>{m}</button>)}</div></div>
+      <div className={styles.mapFrame}><NetworkStage scenario={s} state={mapState} reducedMotion={reducedMotion}/></div>
+      <div className={styles.legend}><span><i/>On track</span><span><i/>Tight</span><span><i/>Breach</span><span><i/>No forecast</span></div>
+      <HorizonRail stops={s.horizonStops} day={day} exposed={mapState.careEventsExposed} visible={1} onScrub={d=>setDay(d??7)} scrubbing/>
+      {mapMode==='Freshness' && <div className={styles.freshness}>{s.facilities.map(f=><span key={f.id}><b>{f.short}</b>{f.daysSinceVerified}d since verified</span>)}</div>}
+    </section>
+    <section id="explore-features" data-scene className={`${styles.scene} ${styles.intervention}`}>
+      <div className={styles.sectionHead}><p className={styles.eyebrow}>04 / INTERVENTION STUDIO</p><h2>The nearest stock<br/>isn’t always the answer.</h2><p>Compare possible donors. Protect Bhatpar without creating a shortage somewhere else.</p></div>
+      <div className={styles.donorStudio}><div className={styles.donorList}>{s.candidates.map(c=><button key={c.id} aria-pressed={donor===c.facilityId} onClick={()=>setDonor(c.facilityId)}><span>{c.facilityName}<small>{c.distanceKm} km · {c.transitHours} h transit</small></span><ArrowRight size={20}/></button>)}</div><div className={styles.donorDetail} aria-live="polite"><span className={styles.eyebrow}>{invalidated?'SOURCE RULED OUT':revised?'REVISED PLAN':candidate.verdict==='chosen'?'INITIAL PLAN':candidate.verdict==='held'?'FALLBACK OPTION':'NOT VIABLE'}</span><h3>{candidate.facilityName}</h3><div className={styles.transfer}><Package size={40}/><span/><Truck size={32}/><span/><ShieldCheck size={40}/></div><div className={styles.metrics}><div><strong>{invalidated?0:candidate.surplus}</strong><span>units above reserve</span></div><div><strong>{candidate.transitHours}<small>h</small></strong><span>estimated transit</span></div></div><p>{reason}</p>{(revised||(!confirmed&&donor==='chc-d'))&&<div className={styles.plan}>Proposed transfer <b>{s.replan.transferUnits} units → Bhatpar PHC</b></div>}<a href="#evidence">Check the field evidence <ArrowDown size={17}/></a></div></div>
+    </section>
+    <section id="evidence" data-scene className={`${styles.scene} ${styles.evidence}`}>
+      <div className={styles.sectionHead}><p className={styles.eyebrow}>05 / REALITY LENS</p><h2>A plan is only as good<br/>as its <em>ground truth.</em></h2><p>The digital record says {s.realityLens.digitalRecord}. The field register says {s.realityLens.fieldEvidence}. Review the evidence before changing the plan.</p></div>
+      <div className={styles.evidenceGrid}><div className={styles.register}><div><ScanLine size={26}/><span>WARD STOCK REGISTER<small>CHC D · Kuchinda / sample transcription</small></span></div><table><thead><tr><th>Date</th><th>Issued</th><th>Balance</th></tr></thead><tbody>{s.realityLens.registerRows.map(r=><tr key={r.date}><td>{r.date}</td><td>{r.issued??'—'}</td><td>{r.balance}</td></tr>)}</tbody></table><p>Amoxicillin · oral suspension</p><span className={styles.paperStamp}>FIELD EVIDENCE</span></div><div className={styles.confirmPanel}><p className={styles.eyebrow}>HUMAN REVIEW REQUIRED</p><div className={styles.countChange}><span>{s.realityLens.digitalRecord}<small>digital record</small></span><ArrowRight/><span>{s.realityLens.fieldEvidence}<small>observed count</small></span></div><p>{Math.round(s.realityLens.confidence*100)}% extraction confidence. This correction removes CHC D as a viable donor and brings CHC B into the plan.</p><button className={styles.primary} disabled={confirmed} onClick={()=>{setConfirmed(true);setDonor('chc-b');setStep(1);}}>{confirmed?'Correction confirmed':'Confirm the observed count'}{confirmed?<Check size={20}/>:<ArrowRight size={20}/>}</button><p className={styles.confirmStatus} role="status">{confirmed?'Plan updated: CHC B · Hemgir → Bhatpar, 80 units.':'The original plan remains unchanged until you confirm.'}</p>{confirmed&&<a href="#closing">Follow the revised shipment <ArrowDown size={17}/></a>}</div></div>
+    </section>
+    <section id="closing" data-scene className={`${styles.scene} ${styles.recovery}`}>
+      <div className={styles.sectionHead}><p className={styles.eyebrow}>06 / CLOSE THE LOOP</p><h2>{complete?'Care protected.':'Delivery is a step.'}<br/><em>{complete?'Evidence connected.':'Recovery is the outcome.'}</em></h2><p>Follow the illustrative shipment from corrected inventory to a matched batch and care covered.</p></div>
+      <div className={styles.recoveryGrid}><div className={styles.receipt}><span className={styles.eyebrow}>TRANSFER RECORD / AMX-2403-B</span><h3>CHC B · Hemgir <ArrowDown/> Bhatpar PHC</h3><div className={styles.metrics}><div><strong>{s.replan.transferUnits}</strong><span>units to transfer</span></div><div><strong>{complete?s.totalCareEventsExposed:'—'}</strong><span>care events protected</span></div></div><div className={styles.progress}><i style={{width:`${step/s.verification.length*100}%`}}/></div><p role="status">{!confirmed?'Awaiting confirmed field evidence':complete?'Illustrative resilience loop closed':s.verification[Math.max(0,step-1)].detail}</p>{!confirmed?<a className={styles.primary} href="#evidence">Review evidence first <ArrowRight size={18}/></a>:<button className={styles.primary} disabled={complete} onClick={()=>setStep(n=>Math.min(n+1,s.verification.length))}>{complete?'Recovery verified':`Advance demo: ${s.verification[step].label}`}<Check size={18}/></button>}<button className={styles.reset} onClick={()=>{setConfirmed(false);setStep(0);setDonor('chc-d');}}><RotateCcw size={14}/> Reset demonstration</button></div><ol className={styles.timeline}>{s.verification.map((v,i)=><li key={v.key} data-done={i<step}><span>{i<step?<Check size={16}/>:String(i+1).padStart(2,'0')}</span><div><b>{v.label}</b><p>{v.detail}</p></div></li>)}</ol></div>
+      <div className={styles.finalCta}><h3>Keep shortages from<br/>becoming missed care.</h3><Link className={styles.primary} to={routes.demo}>Explore Demo District <ArrowRight size={20}/></Link></div>
+    </section>
+    <nav className={styles.chapterNav} aria-label="Story chapters">{chapters.map(([id,label],i)=><a key={id} href={`#${id}`} aria-current={active===id?'location':undefined}><span>0{i+1}</span><b>{label}</b></a>)}</nav>
+  </main><Footer/></>;
 }
