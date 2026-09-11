@@ -6,7 +6,7 @@
 .card:hover:not([data-active=true]){transform:translateZ(18px) rotateX(31deg) rotateZ(-9deg) translateY(-8px) scale(1.012);box-shadow:0 8px 0 #b9ccb1,0 24px 38px #143d2a25,0 0 0 1px #eff9e6,0 0 28px #b8de9b55;filter:saturate(1.03)}
 .card:hover:not([data-active=true]) .planeTop svg{transform:translateZ(8px) scale(1.04);filter:drop-shadow(0 0 7px #c5e59b88)}
 .card:hover:not([data-active=true]) .miniBars{opacity:.55;filter:drop-shadow(0 0 5px #b8d79b88)}
-.card[data-dragging=true]{transition:none;cursor:grabbing}
+.card[data-dragging=true]{cursor:grabbing}
 .card[data-active=true] .miniBars{opacity:.65;filter:drop-shadow(0 0 7px #b8d79b)}
 @media(max-width:700px){.card[data-active=true]{transform:translate3d(var(--drag-x,0px),var(--drag-y,0px),40px) rotateX(calc(7deg + var(--drag-tilt,0deg))) rotateY(var(--drag-tilt,0deg)) rotateZ(var(--drag-rotate,0deg)) scale(1.025)}}
 @media(hover:none){.card:hover:not([data-active=true]){transform:none;box-shadow:none;filter:none}.card:hover:not([data-active=true]) .planeTop svg{transform:none;filter:none}.card:hover:not([data-active=true]) .miniBars{opacity:.35;filter:none}}
