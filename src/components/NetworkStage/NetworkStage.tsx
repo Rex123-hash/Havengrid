@@ -397,7 +397,7 @@ function FacilityNode({
   return (
     <g
       className={styles.node}
-      opacity={Math.max(0.08, connectionOpacity)}
+      opacity={Math.max(0.42, connectionOpacity)}
       data-hovered={hovered}
       tabIndex={0}
       role="img"

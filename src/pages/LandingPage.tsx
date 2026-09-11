@@ -11,6 +11,8 @@ import { usePrefersReducedMotion } from '../hooks/useStoryProgress';
 import { routes } from '../brand/brand.config';
 import styles from './LandingPageNew.module.css';
 import './ConnectionScene.css';
+import './ConnectionSceneFix.css';
+import './TimelineFix.css';
 
 const chapters = [['opening','Begin'],['care','Care'],['connect','Connect'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
 const layers = [
@@ -41,6 +43,7 @@ function useSceneProgress(ref: React.RefObject<HTMLElement>) {
 export default function LandingPage() {
   const root = useRef<HTMLElement>(null);
   const connectionRef = useRef<HTMLElement>(null);
+  const closingRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState('opening');
   const [layer, setLayer] = useState(0);
   const [cohort, setCohort] = useState(0);
@@ -51,12 +54,15 @@ export default function LandingPage() {
   const [step, setStep] = useState(0);
   const reducedMotion = usePrefersReducedMotion();
   const connectionProgress = useSceneProgress(connectionRef);
+  const recoveryProgress = useSceneProgress(closingRef);
   const mapState = deriveStoryState(confirmed ? .81 : mapMode === 'Supply routes' ? .59 : .3, s, day);
   const candidate = s.candidates.find(c => c.facilityId === donor)!;
   const invalidated = confirmed && donor === 'chc-d';
   const revised = confirmed && donor === 'chc-b';
   const reason = invalidated ? 'Field count is below the donor safety floor. This source can no longer release stock.' : revised ? s.replan.reason : candidate.reason;
-  const complete = step === s.verification.length;
+  const scrollStep = confirmed ? Math.min(s.verification.length, Math.floor(recoveryProgress * (s.verification.length + 1))) : 0;
+  const shownStep = Math.max(step, scrollStep);
+  const complete = shownStep === s.verification.length;
   useEffect(() => {
     const sections = root.current?.querySelectorAll<HTMLElement>('[data-scene]');
     if (!sections) return;
@@ -101,9 +107,9 @@ export default function LandingPage() {
       <div className={styles.sectionHead}><p className={styles.eyebrow}>05 / REALITY LENS</p><h2>A plan is only as good<br/>as its <em>ground truth.</em></h2><p>The digital record says {s.realityLens.digitalRecord}. The field register says {s.realityLens.fieldEvidence}. Review the evidence before changing the plan.</p></div>
       <div className={styles.evidenceGrid}><div className={styles.register}><div><ScanLine size={26}/><span>WARD STOCK REGISTER<small>CHC D · Kuchinda / sample transcription</small></span></div><table><thead><tr><th>Date</th><th>Issued</th><th>Balance</th></tr></thead><tbody>{s.realityLens.registerRows.map(r=><tr key={r.date}><td>{r.date}</td><td>{r.issued??'—'}</td><td>{r.balance}</td></tr>)}</tbody></table><p>Amoxicillin · oral suspension</p><span className={styles.paperStamp}>FIELD EVIDENCE</span></div><div className={styles.confirmPanel}><p className={styles.eyebrow}>HUMAN REVIEW REQUIRED</p><div className={styles.countChange}><span>{s.realityLens.digitalRecord}<small>digital record</small></span><ArrowRight/><span>{s.realityLens.fieldEvidence}<small>observed count</small></span></div><p>{Math.round(s.realityLens.confidence*100)}% extraction confidence. This correction removes CHC D as a viable donor and brings CHC B into the plan.</p><button className={styles.primary} disabled={confirmed} onClick={()=>{setConfirmed(true);setDonor('chc-b');setStep(1);}}>{confirmed?'Correction confirmed':'Confirm the observed count'}{confirmed?<Check size={20}/>:<ArrowRight size={20}/>}</button><p className={styles.confirmStatus} role="status">{confirmed?'Plan updated: CHC B · Hemgir → Bhatpar, 80 units.':'The original plan remains unchanged until you confirm.'}</p>{confirmed&&<a href="#closing">Follow the revised shipment <ArrowDown size={17}/></a>}</div></div>
     </section>
-    <section id="closing" data-scene className={`${styles.scene} ${styles.recovery}`}>
+    <section id="closing" data-scene ref={closingRef} className={`${styles.scene} ${styles.recovery}`}>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>06 / CLOSE THE LOOP</p><h2>{complete?'Care protected.':'Delivery is a step.'}<br/><em>{complete?'Evidence connected.':'Recovery is the outcome.'}</em></h2><p>Follow the illustrative shipment from corrected inventory to a matched batch and care covered.</p></div>
-      <div className={styles.recoveryGrid}><div className={styles.receipt}><span className={styles.eyebrow}>TRANSFER RECORD / AMX-2403-B</span><h3>CHC B · Hemgir <ArrowDown/> Bhatpar PHC</h3><div className={styles.metrics}><div><strong>{s.replan.transferUnits}</strong><span>units to transfer</span></div><div><strong>{complete?s.totalCareEventsExposed:'—'}</strong><span>care events protected</span></div></div><div className={styles.progress}><i style={{width:`${step/s.verification.length*100}%`}}/></div><p role="status">{!confirmed?'Awaiting confirmed field evidence':complete?'Illustrative resilience loop closed':s.verification[Math.max(0,step-1)].detail}</p>{!confirmed?<a className={styles.primary} href="#evidence">Review evidence first <ArrowRight size={18}/></a>:<button className={styles.primary} disabled={complete} onClick={()=>setStep(n=>Math.min(n+1,s.verification.length))}>{complete?'Recovery verified':`Advance demo: ${s.verification[step].label}`}<Check size={18}/></button>}<button className={styles.reset} onClick={()=>{setConfirmed(false);setStep(0);setDonor('chc-d');}}><RotateCcw size={14}/> Reset demonstration</button></div><ol className={styles.timeline}>{s.verification.map((v,i)=><li key={v.key} data-done={i<step}><span>{i<step?<Check size={16}/>:String(i+1).padStart(2,'0')}</span><div><b>{v.label}</b><p>{v.detail}</p></div></li>)}</ol></div>
+      <div className={styles.recoveryGrid}><div className={styles.receipt}><span className={styles.eyebrow}>TRANSFER RECORD / AMX-2403-B</span><h3>CHC B · Hemgir <ArrowDown/> Bhatpar PHC</h3><div className={styles.metrics}><div><strong>{s.replan.transferUnits}</strong><span>units to transfer</span></div><div><strong>{complete?s.totalCareEventsExposed:'—'}</strong><span>care events protected</span></div></div><div className={styles.progress}><i style={{width:`${shownStep/s.verification.length*100}%`}}/></div><p role="status">{!confirmed?'Awaiting confirmed field evidence':complete?'Illustrative resilience loop closed':s.verification[Math.max(0,shownStep-1)].detail}</p>{!confirmed?<a className={styles.primary} href="#evidence">Review evidence first <ArrowRight size={18}/></a>:<button className={styles.primary} disabled={complete} onClick={()=>setStep(n=>Math.min(Math.max(n,shownStep)+1,s.verification.length))}>{complete?'Recovery verified':`Advance demo: ${s.verification[shownStep].label}`}<Check size={18}/></button>}<button className={styles.reset} onClick={()=>{setConfirmed(false);setStep(0);setDonor('chc-d');}}><RotateCcw size={14}/> Reset demonstration</button></div><ol className={`${styles.timeline} timelineStrong`}>{s.verification.map((v,i)=><li key={v.key} data-done={i<shownStep}><span>{i<shownStep?<Check size={16}/>:String(i+1).padStart(2,'0')}</span><div><b>{v.label}</b><p>{v.detail}</p></div></li>)}</ol></div>
       <div className={styles.finalCta}><h3>Keep shortages from<br/>becoming missed care.</h3><Link className={styles.primary} to={routes.demo}>Explore Demo District <ArrowRight size={20}/></Link></div>
     </section>
     <nav className={styles.chapterNav} aria-label="Story chapters">{chapters.map(([id,label],i)=><a key={id} href={`#${id}`} aria-current={active===id?'location':undefined}><span>0{i+1}</span><b>{label}</b></a>)}</nav>
