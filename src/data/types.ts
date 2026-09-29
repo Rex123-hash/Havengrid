@@ -45,9 +45,19 @@ export type CareCohortKey = 'paediatric' | 'maternal' | 'scheduled';
 export interface CareCohort {
   key: CareCohortKey;
   label: string;
+  /** EXPOSED encounters in this cohort (inside the uncovered interval). */
   count: number;
+  /** Scheduled encounters in this cohort inside the planning window. */
+  scheduled: number;
   /** Plain-language detail shown beside the cohort. */
   detail: string;
+}
+
+/** The three-tier care statement: scheduled · exposed · would be unserved. */
+export interface CareExposure {
+  scheduled: number;
+  exposed: number;
+  unserved: number;
 }
 
 export interface TrackedItem {
@@ -58,7 +68,11 @@ export interface TrackedItem {
   projectedDemand: number;
   demandWindowDays: number;
   replenishmentEtaDays: number;
-  breachDay: number;
+  /** First day-end at which stock cannot cover the next `minCoverDays` of care. */
+  coverageBreachDay: number;
+  /** First day-end at which stock is physically exhausted. Distinct from coverage. */
+  stockoutDay: number | null;
+  minCoverDays: number;
 }
 
 export type CandidateVerdict = 'chosen' | 'held' | 'rejected';
@@ -67,7 +81,8 @@ export interface CandidateIntervention {
   id: string;
   facilityId: string;
   facilityName: string;
-  surplus: number;
+  /** Units the donor can release and still stay covered through its protection window. */
+  transferable: number;
   distanceKm: number;
   transitHours: number;
   verdict: CandidateVerdict;
@@ -93,11 +108,12 @@ export interface RealityLensEvidence {
   capturedVia: string;
   /** Rows transcribed from the register, shown as the evidence artefact. */
   registerRows: { date: string; issued: number | null; balance: number }[];
-  /** Effect on the donor's own forecast once a human confirms. */
-  breachDayBefore: number;
-  breachDayAfter: number;
-  /** Facilities that change state as a consequence of the correction. */
+  /** Effect on the donor's own forecast once a human confirms. `null` = no breach inside the horizon. */
+  breachDayBefore: number | null;
+  breachDayAfter: number | null;
+  /** Facilities whose coverage changes as a consequence of the correction, with their corrected breach day. */
   cascadeFacilityIds: string[];
+  cascadeBreachDays: Record<string, number | null>;
 }
 
 export interface VerificationStep {
@@ -116,6 +132,7 @@ export interface LandingScenario {
   facilities: Facility[];
   links: SupplyLink[];
   careCohorts: CareCohort[];
+  careExposure: CareExposure;
   totalCareEventsExposed: number;
   candidates: CandidateIntervention[];
   realityLens: RealityLensEvidence;

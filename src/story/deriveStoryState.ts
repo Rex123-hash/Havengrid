@@ -123,7 +123,7 @@ export function deriveStoryState(
     // dependent with it. This is the cascade — same network, worse reality.
     let breach = f.breachDay;
     if (evidenceConfirmed && cascade.has(f.id)) {
-      breach = f.id === s.realityLens.facilityId ? s.realityLens.breachDayAfter : 8;
+      breach = s.realityLens.cascadeBreachDays[f.id] ?? null;
     }
     // Once the recovery verifies, the focus facility is restored.
     if (resolved && f.id === focusId) breach = null;

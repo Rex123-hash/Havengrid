@@ -1,0 +1,21 @@
+{
+  "capture_method": "public_rendered_page",
+  "source_url": "https://www.anemiamuktbharat.info/reports/stock",
+  "captured_at": "2026-09-11T21:00:51.634Z",
+  "data_as_on": "2026-06-03",
+  "location": "ODISHA",
+  "district": "KALAHANDI",
+  "financial_year": "2025-2026",
+  "unit_note": "figures in lakhs",
+  "commodity": "IFA Red",
+  "table": {
+    "columns": ["Indicators", "Year", "April", "May", "June", "July", "August", "September", "October", "November", "December", "January", "February", "March"],
+    "rows": [
+      {"indicator": "Stock balance from last month – IFA Red", "code": "HMIS 19.6", "values": ["110.9", "110.9", "110.9", "109.8", "105.2", "93.8", "0", "-752000", "-544300", "1.5", "1.1", "0.4"]},
+      {"indicator": "Stocks received – IFA Red", "code": "HMIS 19.6", "values": ["0", "0", "0", "0", "0", "0", "0", "7.9", "15.6", "8.5", "0.2", "0"]},
+      {"indicator": "Stocks unusable – IFA Red", "code": "HMIS 19.6", "values": ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]},
+      {"indicator": "Stocks distributed – IFA Red", "code": "HMIS 19.6", "values": ["0", "0", "1.1", "4.6", "11.4", "11.4", "7.5", "5.8", "8.7", "8.9", "0.9", "2.5"]},
+      {"indicator": "Stocks available – IFA Red", "code": "HMIS 19.6", "values": ["110.9", "110.9", "109.8", "105.2", "93.8", "82.3", "-752000", "-544300", "1.5", "1.1", "0.4", "-209250"]}
+    ]
+  }
+}

@@ -5,7 +5,9 @@ import { Navbar } from '../components/Navbar/Navbar';
 import { Footer } from '../components/Footer/Footer';
 import { NetworkStage } from '../components/NetworkStage/NetworkStage';
 import { HorizonRail } from '../components/HorizonRail/HorizonRail';
-import { landingScenario as s } from '../data/landingScenario';
+import { useScenario } from '../data/scenarioSource';
+import { ScenarioGate } from '../components/ScenarioGate/ScenarioGate';
+import type { LandingScenario } from '../data/types';
 import { deriveStoryState } from '../story/deriveStoryState';
 import { usePrefersReducedMotion } from '../hooks/useStoryProgress';
 import { routes } from '../brand/brand.config';
@@ -15,10 +17,10 @@ import './RecoveryTimeline.css';
 import layerCardStyles from './LayerCards.module.css';
 
 const chapters = [['opening','Begin'],['care','Care'],['connect','Connect'],['story','District'],['explore-features','Act'],['evidence','Verify'],['closing','Recover']];
-const layers = [
+const buildLayers = (s: LandingScenario) => [
   { label: 'Scheduled care', value: s.item.projectedDemand, unit: 'units needed', icon: CalendarDays, detail: 'Demand across the next 14 days, connected to appointments already scheduled.' },
   { label: 'Available stock', value: s.item.currentStock, unit: 'units on hand', icon: Package, detail: 'Current inventory at Bhatpar PHC. Enough for today, but not for the full care window.' },
-  { label: 'Incoming supply', value: s.item.replenishmentEtaDays, unit: 'days to arrival', icon: Truck, detail: 'The next replenishment arrives after the predicted shortage on day 6.' },
+  { label: 'Incoming supply', value: s.item.replenishmentEtaDays, unit: 'days to arrival', icon: Truck, detail: `The next replenishment arrives after care coverage is at risk on day ${s.item.coverageBreachDay}${s.item.stockoutDay ? ` and physical stockout on day ${s.item.stockoutDay}` : ''}.` },
 ];
 
 function useSceneProgress(ref: React.RefObject<HTMLElement>) {
@@ -40,7 +42,19 @@ function useSceneProgress(ref: React.RefObject<HTMLElement>) {
   return progress;
 }
 
+/**
+ * Gate: the story only ever renders from a READY scenario. In backend mode an
+ * unavailable or policy-rejected backend shows an honest degraded state — it
+ * never falls back to the local seed.
+ */
 export default function LandingPage() {
+  const state = useScenario();
+  if (state.status !== 'ready') return <ScenarioGate state={state} />;
+  return <LandingPageContent s={state.scenario} />;
+}
+
+function LandingPageContent({ s }: { s: LandingScenario }) {
+  const layers = buildLayers(s);
   const root = useRef<HTMLElement>(null);
   const connectionRef = useRef<HTMLElement>(null);
   const closingRef = useRef<HTMLElement>(null);
@@ -112,7 +126,7 @@ export default function LandingPage() {
   const candidate = s.candidates.find(c => c.facilityId === donor)!;
   const invalidated = confirmed && donor === 'chc-d';
   const revised = confirmed && donor === 'chc-b';
-  const reason = invalidated ? 'Field count is below the donor safety floor. This source can no longer release stock.' : revised ? s.replan.reason : candidate.reason;
+  const reason = invalidated ? `The confirmed count leaves this donor unable to cover its own next ${s.item.minCoverDays} days — its coverage breaches on day ${s.realityLens.breachDayAfter}. It can no longer release stock.` : revised ? s.replan.reason : candidate.reason;
   const scrollStep = Math.min(s.verification.length, Math.floor(recoveryProgress * (s.verification.length + 1)));
   const shownStep = Math.max(step, scrollStep);
   const verifiedStep = confirmed ? shownStep : 0;
@@ -144,7 +158,7 @@ export default function LandingPage() {
     <section id="care" data-scene className={`${styles.scene} ${styles.consequence}`}>
       <div className={styles.bridge}><span>THE SIGNAL BECOMES A CONSEQUENCE</span><i/><ArrowDown size={20}/></div>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>02 / THE CARE BEHIND THE COUNT</p><h2>A shortage is never<br/>just a number.</h2><p>{s.item.projectedDemand} needed. {s.item.currentStock} available. A gap of {s.item.projectedDemand-s.item.currentStock} units puts {s.totalCareEventsExposed} scheduled care events at risk.</p></div>
-      <div className={styles.impactStage}><span className={styles.giant} aria-hidden="true">44</span><div className={styles.cohorts}>{s.careCohorts.map((c,i)=><button key={c.key} onClick={()=>setCohort(i)} aria-pressed={cohort===i} data-selected={cohort===i}><span>0{i+1} / {c.label}</span><strong>{c.count}</strong><p>{c.detail}</p><ArrowRight size={22}/></button>)}</div><div className={styles.people} aria-live="polite"><div>{Array.from({length:23},(_,i)=><i key={i} data-lit={i<s.careCohorts[cohort].count}/>)}</div><p><b>{s.careCohorts[cohort].count} of {s.totalCareEventsExposed}</b> care events · {s.careCohorts[cohort].label}</p></div></div>
+      <div className={styles.impactStage}><span className={styles.giant} aria-hidden="true">{s.careExposure.exposed}</span><div className={styles.cohorts}>{s.careCohorts.map((c,i)=><button key={c.key} onClick={()=>setCohort(i)} aria-pressed={cohort===i} data-selected={cohort===i}><span>0{i+1} / {c.label}</span><strong>{c.count}</strong><p>{c.detail}</p><ArrowRight size={22}/></button>)}</div><div className={styles.people} aria-live="polite"><div>{Array.from({length:s.careCohorts[cohort].scheduled},(_,i)=><i key={i} data-lit={i<s.careCohorts[cohort].count}/>)}</div><p><b>{s.careCohorts[cohort].count} of {s.careCohorts[cohort].scheduled}</b> scheduled {s.careCohorts[cohort].label} encounters exposed · {s.careExposure.exposed} of {s.careExposure.scheduled} overall, {s.careExposure.unserved} would go unserved</p></div></div>
     </section>
     <section id="connect" data-scene ref={connectionRef} className="connectionScene">
       <div className="connectionSticky">
@@ -162,11 +176,11 @@ export default function LandingPage() {
     </section>
     <section id="explore-features" data-scene className={`${styles.scene} ${styles.intervention}`}>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>05 / INTERVENTION STUDIO</p><h2>The nearest stock<br/>isn’t always the answer.</h2><p>Compare possible donors. Protect Bhatpar without creating a shortage somewhere else.</p></div>
-      <div className={styles.donorStudio}><div className={styles.donorList}>{s.candidates.map(c=><button key={c.id} aria-pressed={donor===c.facilityId} onClick={()=>setDonor(c.facilityId)}><span>{c.facilityName}<small>{c.distanceKm} km · {c.transitHours} h transit</small></span><ArrowRight size={20}/></button>)}</div><div className={styles.donorDetail} aria-live="polite"><span className={styles.eyebrow}>{invalidated?'SOURCE RULED OUT':revised?'REVISED PLAN':candidate.verdict==='chosen'?'INITIAL PLAN':candidate.verdict==='held'?'FALLBACK OPTION':'NOT VIABLE'}</span><h3>{candidate.facilityName}</h3><div className={styles.transfer}><Package size={40}/><span/><Truck size={32}/><span/><ShieldCheck size={40}/></div><div className={styles.metrics}><div><strong>{invalidated?0:candidate.surplus}</strong><span>units above reserve</span></div><div><strong>{candidate.transitHours}<small>h</small></strong><span>estimated transit</span></div></div><p>{reason}</p>{(revised||(!confirmed&&donor==='chc-d'))&&<div className={styles.plan}>Proposed transfer <b>{s.replan.transferUnits} units → Bhatpar PHC</b></div>}<a href="#evidence">Check the field evidence <ArrowDown size={17}/></a></div></div>
+      <div className={styles.donorStudio}><div className={styles.donorList}>{s.candidates.map(c=><button key={c.id} aria-pressed={donor===c.facilityId} onClick={()=>setDonor(c.facilityId)}><span>{c.facilityName}<small>{c.distanceKm} km · {c.transitHours} h transit</small></span><ArrowRight size={20}/></button>)}</div><div className={styles.donorDetail} aria-live="polite"><span className={styles.eyebrow}>{invalidated?'SOURCE RULED OUT':revised?'REVISED PLAN':candidate.verdict==='chosen'?'INITIAL PLAN':candidate.verdict==='held'?'FALLBACK OPTION':'NOT VIABLE'}</span><h3>{candidate.facilityName}</h3><div className={styles.transfer}><Package size={40}/><span/><Truck size={32}/><span/><ShieldCheck size={40}/></div><div className={styles.metrics}><div><strong>{invalidated?0:Math.max(0, candidate.transferable)}</strong><span>transferable units</span></div><div><strong>{candidate.transitHours}<small>h</small></strong><span>estimated transit</span></div></div><p>{reason}</p>{(revised||(!confirmed&&donor==='chc-d'))&&<div className={styles.plan}>Proposed transfer <b>{s.replan.transferUnits} units → Bhatpar PHC</b></div>}<a href="#evidence">Check the field evidence <ArrowDown size={17}/></a></div></div>
     </section>
     <section id="evidence" data-scene className={`${styles.scene} ${styles.evidence}`}>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>06 / REALITY LENS</p><h2>A plan is only as good<br/>as its <em>ground truth.</em></h2><p>The digital record says {s.realityLens.digitalRecord}. The field register says {s.realityLens.fieldEvidence}. Review the evidence before changing the plan.</p></div>
-      <div className={styles.evidenceGrid}><div className={styles.register}><div><ScanLine size={26}/><span>WARD STOCK REGISTER<small>CHC D · Kuchinda / sample transcription</small></span></div><table><thead><tr><th>Date</th><th>Issued</th><th>Balance</th></tr></thead><tbody>{s.realityLens.registerRows.map(r=><tr key={r.date}><td>{r.date}</td><td>{r.issued??'—'}</td><td>{r.balance}</td></tr>)}</tbody></table><p>Amoxicillin · oral suspension</p><span className={styles.paperStamp}>FIELD EVIDENCE</span></div><div className={styles.confirmPanel}><p className={styles.eyebrow}>HUMAN REVIEW REQUIRED</p><div className={styles.countChange}><span>{s.realityLens.digitalRecord}<small>digital record</small></span><ArrowRight/><span>{s.realityLens.fieldEvidence}<small>observed count</small></span></div><p>{Math.round(s.realityLens.confidence*100)}% extraction confidence. This correction removes CHC D as a viable donor and brings CHC B into the plan.</p><button className={styles.primary} disabled={confirmed} onClick={()=>{setConfirmed(true);setDonor('chc-b');setStep(1);}}>{confirmed?'Correction confirmed':'Confirm the observed count'}{confirmed?<Check size={20}/>:<ArrowRight size={20}/>}</button><p className={styles.confirmStatus} role="status">{confirmed?'Plan updated: CHC B · Hemgir → Bhatpar, 80 units.':'The original plan remains unchanged until you confirm.'}</p>{confirmed&&<a href="#closing">Follow the revised shipment <ArrowDown size={17}/></a>}</div></div>
+      <div className={styles.evidenceGrid}><div className={styles.register}><div><ScanLine size={26}/><span>WARD STOCK REGISTER<small>CHC D · Kuchinda / sample transcription</small></span></div><table><thead><tr><th>Date</th><th>Issued</th><th>Balance</th></tr></thead><tbody>{s.realityLens.registerRows.map(r=><tr key={r.date}><td>{r.date}</td><td>{r.issued??'—'}</td><td>{r.balance}</td></tr>)}</tbody></table><p>Amoxicillin · oral suspension</p><span className={styles.paperStamp}>FIELD EVIDENCE</span></div><div className={styles.confirmPanel}><p className={styles.eyebrow}>HUMAN REVIEW REQUIRED</p><div className={styles.countChange}><span>{s.realityLens.digitalRecord}<small>digital record</small></span><ArrowRight/><span>{s.realityLens.fieldEvidence}<small>observed count</small></span></div><p>{Math.round(s.realityLens.confidence*100)}% extraction confidence. Confirming re-runs the forecast: {s.realityLens.facilityName} can no longer donate safely and the candidates are re-ranked.</p><button className={styles.primary} disabled={confirmed} onClick={()=>{setConfirmed(true);setDonor('chc-b');setStep(1);}}>{confirmed?'Correction confirmed':'Confirm the observed count'}{confirmed?<Check size={20}/>:<ArrowRight size={20}/>}</button><p className={styles.confirmStatus} role="status">{confirmed?`Plan updated: ${s.replan.facilityName} → Bhatpar PHC, ${s.replan.transferUnits} units. ${s.realityLens.facilityName} now carries its own coverage risk on day ${s.realityLens.breachDayAfter}.`:'The original plan remains unchanged until you confirm.'}</p>{confirmed&&<a href="#closing">Follow the revised shipment <ArrowDown size={17}/></a>}</div></div>
     </section>
     <section id="closing" data-scene ref={closingRef} className={`${styles.scene} ${styles.recovery}`}>
       <div className={styles.sectionHead}><p className={styles.eyebrow}>07 / CLOSE THE LOOP</p><h2>{complete?'Care protected.':'Delivery is a step.'}<br/><em>{complete?'Evidence connected.':'Recovery is the outcome.'}</em></h2><p>Follow the illustrative shipment from corrected inventory to a matched batch and care covered.</p></div>

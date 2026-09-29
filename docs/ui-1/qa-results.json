@@ -1,0 +1,186 @@
+{
+  "results": [
+    {
+      "page": "login",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 900
+    },
+    {
+      "page": "situation",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 929
+    },
+    {
+      "page": "network",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 900
+    },
+    {
+      "page": "facilities",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 1013
+    },
+    {
+      "page": "facility",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 900
+    },
+    {
+      "page": "cases",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 900
+    },
+    {
+      "page": "case",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 1618
+    },
+    {
+      "page": "evidence",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 900
+    },
+    {
+      "page": "evidence-detail",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 1092
+    },
+    {
+      "page": "recovery",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 1204
+    },
+    {
+      "page": "intelligence",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 1379
+    },
+    {
+      "page": "settings",
+      "width": 1440,
+      "scroll": 1440,
+      "viewport": 1440,
+      "height": 900
+    },
+    {
+      "page": "login",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "situation",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "network",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "facilities",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "facility",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "cases",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "case",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1646
+    },
+    {
+      "page": "evidence",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    },
+    {
+      "page": "evidence-detail",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1099
+    },
+    {
+      "page": "recovery",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1218
+    },
+    {
+      "page": "intelligence",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1394
+    },
+    {
+      "page": "settings",
+      "width": 1920,
+      "scroll": 1920,
+      "viewport": 1920,
+      "height": 1080
+    }
+  ],
+  "errors": [],
+  "backendRequests": [],
+  "checks": [
+    "Evidence confirmation and persistence",
+    "Viewer restrictions",
+    "District persistence and isolation",
+    "Mode visibility",
+    "Separate coverage/care gates",
+    "Ask shortcut and escape",
+    "Facility filters and tabs",
+    "Keyboard network selection",
+    "Reduced motion and narrow layouts",
+    "Multi-district mock login and onboarding draft"
+  ]
+}

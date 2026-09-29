@@ -1,0 +1,1641 @@
+{
+  "schema_version": "0.8.1",
+  "scenario_id": "case-lahunipada-ifa-red-rehearsal-001",
+  "mode": "rehearsal",
+  "rehearsal_label": "REAL PUBLIC CONTEXT + CONTROLLED FIELD OBSERVATIONS + MODEL-DERIVED OUTPUTS",
+  "district": {
+    "id": "sundargarh",
+    "name": "Sundargarh",
+    "region": "Odisha · India",
+    "forecast_at": "2026-09-12T02:30:00Z"
+  },
+  "recipient_facility": {
+    "id": "chc-lahunipada",
+    "name": "Community Health Centre Lahunipada",
+    "short_name": "CHC Lahunipada",
+    "tier": "chc",
+    "district_id": "sundargarh",
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "block": "Lahunipada",
+    "official_identifier": null,
+    "source_ref": "https://health.odisha.gov.in/or/healthinstitutes/parathama-raepharaala-yaunaita",
+    "source_date": "2026-06-13T00:00:00Z",
+    "currentness": "current_verified",
+    "coordinate_source": "osm_corroborated",
+    "facility_type": "CHC",
+    "latitude": "21.8361054",
+    "longitude": "85.0756074",
+    "coordinate_provenance": {
+      "source_type": "facility_directory",
+      "status": "observed",
+      "observed_at": "2026-09-12T00:00:00Z",
+      "source_ref": "https://www.openstreetmap.org/node/10100695",
+      "origin": "live_external_api",
+      "confidence": "1",
+      "note": "Coordinate retrieval time UNKNOWN. Originally recorded 2026-09-12T00:00:00Z was ahead of audit clock; retained as unverified metadata, not an accepted retrieval instant. Corroborating OSM point; official identity comes from Odisha.",
+      "publisher": "OpenStreetMap contributors",
+      "source_period": null,
+      "retrieved_at": null,
+      "geographic_granularity": "point",
+      "source_hash": null,
+      "quality_flags": []
+    }
+  },
+  "commodity": {
+    "id": "ifa-red-60mg-500mcg",
+    "name": "IFA Red",
+    "form": "60 mg elemental iron + 500 µg folic acid",
+    "unit": "dispensing unit",
+    "pack_size": 1,
+    "calculation_unit": "tablet",
+    "physical_dispatch_unit": "UNKNOWN",
+    "pack_size_basis": "UNKNOWN physical pack data; pack_size=1 is calculation granularity only",
+    "dose_rules": [
+      {
+        "id": "ifa-red-antenatal",
+        "quantity": "1",
+        "unit": "tablet",
+        "frequency": "daily",
+        "population": "pregnant women",
+        "programme_phase": "antenatal: from the fourth month / second trimester; minimum 180 days during pregnancy",
+        "duration_days": 180,
+        "basis_ref": "https://nhm.gov.in/images/pdf/Nutrition/AMB-guidelines/Anemia-Mukt-Bharat-Operational-Guidelines-FINAL.pdf",
+        "evidence_grade": "directly_linked"
+      },
+      {
+        "id": "ifa-red-postpartum",
+        "quantity": "1",
+        "unit": "tablet",
+        "frequency": "daily",
+        "population": "lactating mothers with a 0–6 month child",
+        "programme_phase": "postpartum continuation after delivery",
+        "duration_days": 180,
+        "basis_ref": "https://nhm.gov.in/images/pdf/Nutrition/AMB-guidelines/Anemia-Mukt-Bharat-Operational-Guidelines-FINAL.pdf",
+        "evidence_grade": "directly_linked"
+      }
+    ]
+  },
+  "district_public_stock_context": {
+    "period": "2025-2026",
+    "signals": [
+      {
+        "id": "amb-sundargarh-ifa-red-01",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:April",
+        "opening_balance": "0",
+        "received": "33.7",
+        "distributed": "6.5",
+        "unusable": "0",
+        "available": "27.3",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [
+          "BALANCE_EQUATION_MISMATCH"
+        ],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only. Source balance equation does not reconcile exactly.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": [
+            "BALANCE_EQUATION_MISMATCH"
+          ]
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-02",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:May",
+        "opening_balance": "27.3",
+        "received": "23.7",
+        "distributed": "18.9",
+        "unusable": "0",
+        "available": "32.0",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [
+          "BALANCE_EQUATION_MISMATCH"
+        ],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only. Source balance equation does not reconcile exactly.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": [
+            "BALANCE_EQUATION_MISMATCH"
+          ]
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-03",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:June",
+        "opening_balance": "32.0",
+        "received": "0",
+        "distributed": "8.0",
+        "unusable": "0",
+        "available": "24.0",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-04",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:July",
+        "opening_balance": "24.0",
+        "received": "30.8",
+        "distributed": "4.1",
+        "unusable": "0",
+        "available": "50.7",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-05",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:August",
+        "opening_balance": "50.7",
+        "received": "13.7",
+        "distributed": "10.8",
+        "unusable": "0",
+        "available": "53.6",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-06",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:September",
+        "opening_balance": "53.6",
+        "received": "27.0",
+        "distributed": "20.2",
+        "unusable": "0",
+        "available": "60.4",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-07",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:October",
+        "opening_balance": "60.4",
+        "received": "0",
+        "distributed": "16.6",
+        "unusable": "0",
+        "available": "43.8",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-08",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:November",
+        "opening_balance": "43.8",
+        "received": "0",
+        "distributed": "6.7",
+        "unusable": "0",
+        "available": "37.1",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-09",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:December",
+        "opening_balance": "37.1",
+        "received": "0",
+        "distributed": "11.7",
+        "unusable": "0",
+        "available": "25.4",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-10",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:January",
+        "opening_balance": "25.4",
+        "received": "0",
+        "distributed": "11.9",
+        "unusable": "0",
+        "available": "13.4",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [
+          "BALANCE_EQUATION_MISMATCH"
+        ],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only. Source balance equation does not reconcile exactly.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": [
+            "BALANCE_EQUATION_MISMATCH"
+          ]
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-11",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:February",
+        "opening_balance": "13.4",
+        "received": "0",
+        "distributed": "8.9",
+        "unusable": "0",
+        "available": "4.6",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [
+          "BALANCE_EQUATION_MISMATCH"
+        ],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only. Source balance equation does not reconcile exactly.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": [
+            "BALANCE_EQUATION_MISMATCH"
+          ]
+        }
+      },
+      {
+        "id": "amb-sundargarh-ifa-red-12",
+        "district_id": "sundargarh",
+        "item_id": "ifa-red-60mg-500mcg",
+        "period": "2025-2026:March",
+        "opening_balance": "4.6",
+        "received": "0",
+        "distributed": "3.8",
+        "unusable": "0",
+        "available": "0.8",
+        "unit": "lakh dispensing units",
+        "geographic_granularity": "district",
+        "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+        "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+        "retrieved_at": "2026-09-11T20:46:09.079000Z",
+        "quality_flags": [],
+        "provenance": {
+          "source_type": "district_stock_signal",
+          "status": "observed",
+          "observed_at": "2026-06-03T00:00:00Z",
+          "source_ref": "https://www.anemiamuktbharat.info/reports/stock",
+          "origin": "official_public_data",
+          "confidence": "1",
+          "note": "Rendered public AMB table; district aggregate only.",
+          "publisher": "Anemia Mukt Bharat / National Health Mission",
+          "source_period": "2025-2026",
+          "retrieved_at": "2026-09-11T20:46:09.079000Z",
+          "geographic_granularity": "district",
+          "source_hash": "5005f5917ea8d399684dfd06b29cb4f2f50d0879297b7b9d6e9bfa5ec0700961",
+          "quality_flags": []
+        }
+      }
+    ],
+    "origin": "OFFICIAL_PUBLIC_DATA",
+    "granularity": "district"
+  },
+  "stock_source_date": "2026-06-03",
+  "facility_observation": {
+    "initial_status": "UNKNOWN",
+    "observation_class": "REHEARSAL_FIELD_OBSERVATION",
+    "recipient_quantity": 30,
+    "confirmed": true,
+    "source_ref": "evidence/ev-001",
+    "confirmed_by": "rehearsal-pharmacist"
+  },
+  "programme_obligation": {
+    "id": "obligation-lahunipada-anc-2025-05-001",
+    "programme": "antenatal_ifa",
+    "period": "2025-2026:May",
+    "session_at": "2026-09-19T04:30:00Z",
+    "estimated_population": {
+      "low": 11,
+      "high": 15
+    },
+    "tablets_required": {
+      "low": 11,
+      "high": 15
+    },
+    "deterministic_midpoint": 13,
+    "uncertainty": "11–15 aggregate supplementation obligations; deterministic kernel uses midpoint 13 for this rehearsal.",
+    "evidence_grade": "programme_estimated",
+    "basis": "AMB KPI May 2025 HMIS 1.2.4 (84.4% district percentage) + national 1 tablet/day antenatal policy",
+    "allocation_method": "controlled facility session range allocated to Lahunipada; midpoint used for deterministic forecast",
+    "kpi_value": "84.4",
+    "kpi_source": "https://stage-api-test.anemiamuktbharat.info/report/kpiMonthly",
+    "numeric_basis_origin": "REHEARSAL_ASSUMPTION",
+    "public_programme_basis": "AMB",
+    "facility_denominator_status": "UNKNOWN",
+    "allocation_method_comparison": [
+      {
+        "method": "controlled_facility_session_range",
+        "result": "11–15 aggregate obligations",
+        "used": true,
+        "reason": "Explicit rehearsal session range; midpoint 13 is the only deterministic arithmetic input."
+      },
+      {
+        "method": "district_percentage_preserving",
+        "result": "UNKNOWN",
+        "used": false,
+        "reason": "84.4% is a district percentage without a Lahunipada denominator, so it cannot honestly allocate a facility count."
+      }
+    ]
+  },
+  "forecast": {
+    "initial": {
+      "starting_inventory": 30,
+      "projection": [
+        {
+          "day": 1,
+          "opening": 30,
+          "credit": 0,
+          "demand": 4,
+          "closing": 26,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 2,
+          "opening": 26,
+          "credit": 0,
+          "demand": 4,
+          "closing": 22,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 3,
+          "opening": 22,
+          "credit": 0,
+          "demand": 4,
+          "closing": 18,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 4,
+          "opening": 18,
+          "credit": 0,
+          "demand": 4,
+          "closing": 14,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 5,
+          "opening": 14,
+          "credit": 0,
+          "demand": 4,
+          "closing": 10,
+          "cover_required": 25,
+          "covered": false
+        },
+        {
+          "day": 6,
+          "opening": 10,
+          "credit": 0,
+          "demand": 4,
+          "closing": 6,
+          "cover_required": 25,
+          "covered": false
+        },
+        {
+          "day": 7,
+          "opening": 6,
+          "credit": 0,
+          "demand": 4,
+          "closing": 2,
+          "cover_required": 25,
+          "covered": false
+        },
+        {
+          "day": 8,
+          "opening": 2,
+          "credit": 0,
+          "demand": 17,
+          "closing": -15,
+          "cover_required": 12,
+          "covered": false
+        },
+        {
+          "day": 9,
+          "opening": -15,
+          "credit": 0,
+          "demand": 4,
+          "closing": -19,
+          "cover_required": 12,
+          "covered": false
+        },
+        {
+          "day": 10,
+          "opening": -19,
+          "credit": 0,
+          "demand": 4,
+          "closing": -23,
+          "cover_required": 12,
+          "covered": false
+        },
+        {
+          "day": 11,
+          "opening": -23,
+          "credit": 0,
+          "demand": 4,
+          "closing": -27,
+          "cover_required": 12,
+          "covered": false
+        },
+        {
+          "day": 12,
+          "opening": -27,
+          "credit": 0,
+          "demand": 4,
+          "closing": -31,
+          "cover_required": 12,
+          "covered": false
+        },
+        {
+          "day": 13,
+          "opening": -31,
+          "credit": 0,
+          "demand": 4,
+          "closing": -35,
+          "cover_required": 12,
+          "covered": false
+        },
+        {
+          "day": 14,
+          "opening": -35,
+          "credit": 120,
+          "demand": 4,
+          "closing": 81,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 15,
+          "opening": 81,
+          "credit": 0,
+          "demand": 4,
+          "closing": 77,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 16,
+          "opening": 77,
+          "credit": 0,
+          "demand": 4,
+          "closing": 73,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 17,
+          "opening": 73,
+          "credit": 0,
+          "demand": 4,
+          "closing": 69,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 18,
+          "opening": 69,
+          "credit": 0,
+          "demand": 4,
+          "closing": 65,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 19,
+          "opening": 65,
+          "credit": 0,
+          "demand": 4,
+          "closing": 61,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 20,
+          "opening": 61,
+          "credit": 0,
+          "demand": 4,
+          "closing": 57,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 21,
+          "opening": 57,
+          "credit": 0,
+          "demand": 4,
+          "closing": 53,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 22,
+          "opening": 53,
+          "credit": 0,
+          "demand": 4,
+          "closing": 49,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 23,
+          "opening": 49,
+          "credit": 0,
+          "demand": 4,
+          "closing": 45,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 24,
+          "opening": 45,
+          "credit": 0,
+          "demand": 4,
+          "closing": 41,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 25,
+          "opening": 41,
+          "credit": 0,
+          "demand": 4,
+          "closing": 37,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 26,
+          "opening": 37,
+          "credit": 0,
+          "demand": 4,
+          "closing": 33,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 27,
+          "opening": 33,
+          "credit": 0,
+          "demand": 4,
+          "closing": 29,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 28,
+          "opening": 29,
+          "credit": 0,
+          "demand": 4,
+          "closing": 25,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 29,
+          "opening": 25,
+          "credit": 0,
+          "demand": 4,
+          "closing": 21,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 30,
+          "opening": 21,
+          "credit": 0,
+          "demand": 4,
+          "closing": 17,
+          "cover_required": 12,
+          "covered": true
+        }
+      ],
+      "coverage_breach_day": 5,
+      "stockout_day": 8,
+      "recovery_day": 14,
+      "exposed_total": 13
+    },
+    "post_recovery": {
+      "starting_inventory": 77,
+      "projection": [
+        {
+          "day": 1,
+          "opening": 77,
+          "credit": 0,
+          "demand": 4,
+          "closing": 73,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 2,
+          "opening": 73,
+          "credit": 0,
+          "demand": 4,
+          "closing": 69,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 3,
+          "opening": 69,
+          "credit": 0,
+          "demand": 4,
+          "closing": 65,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 4,
+          "opening": 65,
+          "credit": 0,
+          "demand": 4,
+          "closing": 61,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 5,
+          "opening": 61,
+          "credit": 0,
+          "demand": 4,
+          "closing": 57,
+          "cover_required": 25,
+          "covered": true
+        },
+        {
+          "day": 6,
+          "opening": 57,
+          "credit": 0,
+          "demand": 4,
+          "closing": 53,
+          "cover_required": 25,
+          "covered": true
+        },
+        {
+          "day": 7,
+          "opening": 53,
+          "credit": 0,
+          "demand": 4,
+          "closing": 49,
+          "cover_required": 25,
+          "covered": true
+        },
+        {
+          "day": 8,
+          "opening": 49,
+          "credit": 0,
+          "demand": 17,
+          "closing": 32,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 9,
+          "opening": 32,
+          "credit": 0,
+          "demand": 4,
+          "closing": 28,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 10,
+          "opening": 28,
+          "credit": 0,
+          "demand": 4,
+          "closing": 24,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 11,
+          "opening": 24,
+          "credit": 0,
+          "demand": 4,
+          "closing": 20,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 12,
+          "opening": 20,
+          "credit": 0,
+          "demand": 4,
+          "closing": 16,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 13,
+          "opening": 16,
+          "credit": 0,
+          "demand": 4,
+          "closing": 12,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 14,
+          "opening": 12,
+          "credit": 120,
+          "demand": 4,
+          "closing": 128,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 15,
+          "opening": 128,
+          "credit": 0,
+          "demand": 4,
+          "closing": 124,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 16,
+          "opening": 124,
+          "credit": 0,
+          "demand": 4,
+          "closing": 120,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 17,
+          "opening": 120,
+          "credit": 0,
+          "demand": 4,
+          "closing": 116,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 18,
+          "opening": 116,
+          "credit": 0,
+          "demand": 4,
+          "closing": 112,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 19,
+          "opening": 112,
+          "credit": 0,
+          "demand": 4,
+          "closing": 108,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 20,
+          "opening": 108,
+          "credit": 0,
+          "demand": 4,
+          "closing": 104,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 21,
+          "opening": 104,
+          "credit": 0,
+          "demand": 4,
+          "closing": 100,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 22,
+          "opening": 100,
+          "credit": 0,
+          "demand": 4,
+          "closing": 96,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 23,
+          "opening": 96,
+          "credit": 0,
+          "demand": 4,
+          "closing": 92,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 24,
+          "opening": 92,
+          "credit": 0,
+          "demand": 4,
+          "closing": 88,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 25,
+          "opening": 88,
+          "credit": 0,
+          "demand": 4,
+          "closing": 84,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 26,
+          "opening": 84,
+          "credit": 0,
+          "demand": 4,
+          "closing": 80,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 27,
+          "opening": 80,
+          "credit": 0,
+          "demand": 4,
+          "closing": 76,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 28,
+          "opening": 76,
+          "credit": 0,
+          "demand": 4,
+          "closing": 72,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 29,
+          "opening": 72,
+          "credit": 0,
+          "demand": 4,
+          "closing": 68,
+          "cover_required": 12,
+          "covered": true
+        },
+        {
+          "day": 30,
+          "opening": 68,
+          "credit": 0,
+          "demand": 4,
+          "closing": 64,
+          "cover_required": 12,
+          "covered": true
+        }
+      ],
+      "coverage_breach_day": null,
+      "stockout_day": null,
+      "recovery_day": null,
+      "exposed_total": 0
+    }
+  },
+  "programme_demand": 69,
+  "baseline_demand": {
+    "facility_id": "chc-lahunipada",
+    "daily_units": 4,
+    "window_days": 14,
+    "total_units": 56,
+    "unit": "tablet",
+    "classification": "REHEARSAL_ASSUMPTION",
+    "assumption": "Controlled 4-tablet/day rehearsal dispensing rate; no facility consumption export admitted."
+  },
+  "coverage_breach_day": 5,
+  "stockout_day": 8,
+  "exposure_range": {
+    "low": "11",
+    "high": "15",
+    "unit": "aggregate obligations"
+  },
+  "transfer_quantity": 47,
+  "transfer_quantity_unit": "tablet",
+  "physical_dispatch_unit": "UNKNOWN",
+  "transfer_quantity_note": "47 is a calculation quantity; physical pack/issue unit is UNKNOWN and must be resolved before operational dispatch.",
+  "initial_donor_candidates": [
+    {
+      "donor_id": "sdh-bonai",
+      "donor_name": "Sub-Divisional Hospital Bonai",
+      "feasible": true,
+      "rank": 1,
+      "verdict": "chosen",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "sdh-bonai",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "16.447",
+        "duration_hours": "0.5330555555555555555555555556",
+        "static_duration_hours": "0.5330555555555555555555555556",
+        "retrieved_at": "2026-09-11T21:51:00.053482Z",
+        "provider": "google_routes",
+        "request_hash": "a5657ee838b751cbb8f0c86ce437d3f6cf1ffdfbf4e7942a981ff988d85551da",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:00.053482Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#a5657ee838b751cbb8f0c86ce437d3f6cf1ffdfbf4e7942a981ff988d85551da",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:00.053482Z",
+          "geographic_granularity": "route",
+          "source_hash": "a5657ee838b751cbb8f0c86ce437d3f6cf1ffdfbf4e7942a981ff988d85551da",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 120,
+      "transferable": 52,
+      "post_transfer_margin": 5,
+      "expiry_relief": true
+    },
+    {
+      "donor_id": "sdh-panposh",
+      "donor_name": "Sub-Divisional Hospital Panposh",
+      "feasible": true,
+      "rank": 2,
+      "verdict": "held",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "sdh-panposh",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "73.201",
+        "duration_hours": "1.6875",
+        "static_duration_hours": "1.6875",
+        "retrieved_at": "2026-09-11T21:51:01.334299Z",
+        "provider": "google_routes",
+        "request_hash": "50efa2e111fb7a857a2af19a9889e4e8bf01e4e59f7c4587ed51ff9df2a9c7a5",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:01.334299Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#50efa2e111fb7a857a2af19a9889e4e8bf01e4e59f7c4587ed51ff9df2a9c7a5",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:01.334299Z",
+          "geographic_granularity": "route",
+          "source_hash": "50efa2e111fb7a857a2af19a9889e4e8bf01e4e59f7c4587ed51ff9df2a9c7a5",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 220,
+      "transferable": 150,
+      "post_transfer_margin": 103,
+      "expiry_relief": false
+    },
+    {
+      "donor_id": "chc-laing",
+      "donor_name": "Community Health Centre Laing",
+      "feasible": true,
+      "rank": 3,
+      "verdict": "held",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "chc-laing",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "90.163",
+        "duration_hours": "2.039722222222222222222222222",
+        "static_duration_hours": "2.039722222222222222222222222",
+        "retrieved_at": "2026-09-11T21:51:02.610950Z",
+        "provider": "google_routes",
+        "request_hash": "676e47b747878e606465e7ed3cb926b92653f2903548ee68cbe168c8b80b9aa4",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:02.610950Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#676e47b747878e606465e7ed3cb926b92653f2903548ee68cbe168c8b80b9aa4",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:02.610950Z",
+          "geographic_granularity": "route",
+          "source_hash": "676e47b747878e606465e7ed3cb926b92653f2903548ee68cbe168c8b80b9aa4",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 210,
+      "transferable": 125,
+      "post_transfer_margin": 78,
+      "expiry_relief": false
+    },
+    {
+      "donor_id": "chc-mangaspur",
+      "donor_name": "Community Health Centre Mangaspur",
+      "feasible": true,
+      "rank": 4,
+      "verdict": "held",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "chc-mangaspur",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "155.743",
+        "duration_hours": "3.723055555555555555555555556",
+        "static_duration_hours": "3.723055555555555555555555556",
+        "retrieved_at": "2026-09-11T21:51:03.822245Z",
+        "provider": "google_routes",
+        "request_hash": "ba613897d0c56cfa222369e34b199e814e4a4184a502e10ee3388fee2e787d3d",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:03.822245Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#ba613897d0c56cfa222369e34b199e814e4a4184a502e10ee3388fee2e787d3d",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:03.822245Z",
+          "geographic_granularity": "route",
+          "source_hash": "ba613897d0c56cfa222369e34b199e814e4a4184a502e10ee3388fee2e787d3d",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 260,
+      "transferable": 158,
+      "post_transfer_margin": 111,
+      "expiry_relief": false
+    }
+  ],
+  "donor_candidates": [
+    {
+      "donor_id": "sdh-panposh",
+      "donor_name": "Sub-Divisional Hospital Panposh",
+      "feasible": true,
+      "rank": 1,
+      "verdict": "chosen",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "sdh-panposh",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "73.201",
+        "duration_hours": "1.6875",
+        "static_duration_hours": "1.6875",
+        "retrieved_at": "2026-09-11T21:51:01.334299Z",
+        "provider": "google_routes",
+        "request_hash": "50efa2e111fb7a857a2af19a9889e4e8bf01e4e59f7c4587ed51ff9df2a9c7a5",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:01.334299Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#50efa2e111fb7a857a2af19a9889e4e8bf01e4e59f7c4587ed51ff9df2a9c7a5",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:01.334299Z",
+          "geographic_granularity": "route",
+          "source_hash": "50efa2e111fb7a857a2af19a9889e4e8bf01e4e59f7c4587ed51ff9df2a9c7a5",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 220,
+      "transferable": 150,
+      "post_transfer_margin": 103,
+      "expiry_relief": false
+    },
+    {
+      "donor_id": "chc-laing",
+      "donor_name": "Community Health Centre Laing",
+      "feasible": true,
+      "rank": 2,
+      "verdict": "held",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "chc-laing",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "90.163",
+        "duration_hours": "2.039722222222222222222222222",
+        "static_duration_hours": "2.039722222222222222222222222",
+        "retrieved_at": "2026-09-11T21:51:02.610950Z",
+        "provider": "google_routes",
+        "request_hash": "676e47b747878e606465e7ed3cb926b92653f2903548ee68cbe168c8b80b9aa4",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:02.610950Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#676e47b747878e606465e7ed3cb926b92653f2903548ee68cbe168c8b80b9aa4",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:02.610950Z",
+          "geographic_granularity": "route",
+          "source_hash": "676e47b747878e606465e7ed3cb926b92653f2903548ee68cbe168c8b80b9aa4",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 210,
+      "transferable": 125,
+      "post_transfer_margin": 78,
+      "expiry_relief": false
+    },
+    {
+      "donor_id": "chc-mangaspur",
+      "donor_name": "Community Health Centre Mangaspur",
+      "feasible": true,
+      "rank": 3,
+      "verdict": "held",
+      "quantity": 47,
+      "rejection_reasons": [],
+      "route": {
+        "donor_id": "chc-mangaspur",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "155.743",
+        "duration_hours": "3.723055555555555555555555556",
+        "static_duration_hours": "3.723055555555555555555555556",
+        "retrieved_at": "2026-09-11T21:51:03.822245Z",
+        "provider": "google_routes",
+        "request_hash": "ba613897d0c56cfa222369e34b199e814e4a4184a502e10ee3388fee2e787d3d",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:03.822245Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#ba613897d0c56cfa222369e34b199e814e4a4184a502e10ee3388fee2e787d3d",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:03.822245Z",
+          "geographic_granularity": "route",
+          "source_hash": "ba613897d0c56cfa222369e34b199e814e4a4184a502e10ee3388fee2e787d3d",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 260,
+      "transferable": 158,
+      "post_transfer_margin": 111,
+      "expiry_relief": false
+    },
+    {
+      "donor_id": "sdh-bonai",
+      "donor_name": "Sub-Divisional Hospital Bonai",
+      "feasible": false,
+      "rank": null,
+      "verdict": "rejected",
+      "quantity": 47,
+      "rejection_reasons": [
+        "DONOR_ALREADY_AT_RISK"
+      ],
+      "route": {
+        "donor_id": "sdh-bonai",
+        "recipient_id": "chc-lahunipada",
+        "distance_km": "16.447",
+        "duration_hours": "0.5330555555555555555555555556",
+        "static_duration_hours": "0.5330555555555555555555555556",
+        "retrieved_at": "2026-09-11T21:51:00.053482Z",
+        "provider": "google_routes",
+        "request_hash": "a5657ee838b751cbb8f0c86ce437d3f6cf1ffdfbf4e7942a981ff988d85551da",
+        "status": "OK",
+        "provenance": {
+          "source_type": "route_estimate",
+          "status": "observed",
+          "observed_at": "2026-09-11T21:51:00.053482Z",
+          "source_ref": "https://routes.googleapis.com/directions/v2:computeRoutes#a5657ee838b751cbb8f0c86ce437d3f6cf1ffdfbf4e7942a981ff988d85551da",
+          "origin": "live_external_api",
+          "confidence": "1",
+          "note": "Compute Routes response; traffic-unaware static estimate.",
+          "publisher": "Google Routes API",
+          "source_period": null,
+          "retrieved_at": "2026-09-11T21:51:00.053482Z",
+          "geographic_granularity": "route",
+          "source_hash": "a5657ee838b751cbb8f0c86ce437d3f6cf1ffdfbf4e7942a981ff988d85551da",
+          "quality_flags": []
+        }
+      },
+      "donor_inventory": 20,
+      "transferable": -48,
+      "post_transfer_margin": -95,
+      "expiry_relief": true
+    }
+  ],
+  "initial_chosen_donor": "sdh-bonai",
+  "evidence_correction": {
+    "donor_id": "sdh-bonai",
+    "observation_class": "REHEARSAL_FIELD_OBSERVATION",
+    "initial_quantity": 120,
+    "corrected_quantity": 20,
+    "confirmed": true,
+    "confirmed_by": "rehearsal-pharmacist",
+    "invalidated_plan_id": "plan-001"
+  },
+  "replanned_donor": "sdh-panposh",
+  "coverage_recovery": {
+    "status": "coverage_restored",
+    "reconciliation": "coverage_restored",
+    "coverage_restored_count": 1,
+    "reconciliation_protected_count": 0,
+    "protected_count": 1,
+    "still_exposed": [],
+    "recipient_post_transfer_inventory": 77
+  },
+  "care_delivery_verification": {
+    "id": "care-delivery-001",
+    "exposure": {
+      "kind": "care_obligation",
+      "id": "obligation-lahunipada-anc-2025-05-001"
+    },
+    "outcome": "delivered",
+    "source_ref": "rehearsal-field/care-delivery/anc-session",
+    "provenance": "user_supplied_evidence"
+  },
+  "lifecycle": [
+    "submit_evidence",
+    "confirm_evidence",
+    "propose",
+    "submit_evidence",
+    "confirm_evidence",
+    "invalidate_plan",
+    "recalculate_plan",
+    "approve",
+    "dispatch",
+    "verify_source",
+    "verify_destination",
+    "verify_batch",
+    "reconcile",
+    "care_delivery",
+    "close"
+  ],
+  "provenance_labels": {
+    "district_stock_context": "REAL_PUBLIC",
+    "facility_identity": "REAL_PUBLIC",
+    "facility_observation": "REHEARSAL_EVIDENCE",
+    "programme_obligation": "REHEARSAL_ASSUMPTION",
+    "route": "LIVE_EXTERNAL_API",
+    "forecast_and_plan": "MODEL_DERIVED",
+    "care_delivery": "REHEARSAL_EVIDENCE"
+  },
+  "fact_classifications": {
+    "schema_version": "MODEL_DERIVED",
+    "commodity": "REAL_PUBLIC",
+    "commodity.pack_size": "REHEARSAL_ASSUMPTION",
+    "commodity.pack_size_basis": "UNKNOWN",
+    "commodity.physical_dispatch_unit": "UNKNOWN",
+    "physical_dispatch_unit": "UNKNOWN",
+    "transfer_quantity_unit": "REAL_PUBLIC",
+    "transfer_quantity_note": "UNKNOWN",
+    "district.forecast_at": "REHEARSAL_ASSUMPTION",
+    "programme_obligation": "REHEARSAL_ASSUMPTION",
+    "programme_obligation.kpi_value": "REAL_PUBLIC",
+    "programme_obligation.kpi_source": "REAL_PUBLIC",
+    "programme_obligation.period": "REAL_PUBLIC",
+    "programme_obligation.facility_denominator_status": "UNKNOWN",
+    "recipient_facility.coordinate_provenance": "LIVE_EXTERNAL_API",
+    "recipient_facility.coordinate_provenance.retrieved_at": "UNKNOWN",
+    "recipient_facility.coordinate_provenance.observed_at": "UNKNOWN",
+    "recipient_facility.latitude": "LIVE_EXTERNAL_API",
+    "recipient_facility.longitude": "LIVE_EXTERNAL_API",
+    "initial_donor_candidates.0.route": "LIVE_EXTERNAL_API",
+    "initial_donor_candidates.0.donor_inventory": "REHEARSAL_EVIDENCE",
+    "initial_donor_candidates.0.donor_name": "REAL_PUBLIC",
+    "initial_donor_candidates.0.donor_id": "REAL_PUBLIC",
+    "initial_donor_candidates.1.route": "LIVE_EXTERNAL_API",
+    "initial_donor_candidates.1.donor_inventory": "REHEARSAL_EVIDENCE",
+    "initial_donor_candidates.1.donor_name": "REAL_PUBLIC",
+    "initial_donor_candidates.1.donor_id": "REAL_PUBLIC",
+    "initial_donor_candidates.2.route": "LIVE_EXTERNAL_API",
+    "initial_donor_candidates.2.donor_inventory": "REHEARSAL_EVIDENCE",
+    "initial_donor_candidates.2.donor_name": "REAL_PUBLIC",
+    "initial_donor_candidates.2.donor_id": "REAL_PUBLIC",
+    "initial_donor_candidates.3.route": "LIVE_EXTERNAL_API",
+    "initial_donor_candidates.3.donor_inventory": "REHEARSAL_EVIDENCE",
+    "initial_donor_candidates.3.donor_name": "REAL_PUBLIC",
+    "initial_donor_candidates.3.donor_id": "REAL_PUBLIC",
+    "donor_candidates.0.route": "LIVE_EXTERNAL_API",
+    "donor_candidates.0.donor_inventory": "REHEARSAL_EVIDENCE",
+    "donor_candidates.0.donor_name": "REAL_PUBLIC",
+    "donor_candidates.0.donor_id": "REAL_PUBLIC",
+    "donor_candidates.1.route": "LIVE_EXTERNAL_API",
+    "donor_candidates.1.donor_inventory": "REHEARSAL_EVIDENCE",
+    "donor_candidates.1.donor_name": "REAL_PUBLIC",
+    "donor_candidates.1.donor_id": "REAL_PUBLIC",
+    "donor_candidates.2.route": "LIVE_EXTERNAL_API",
+    "donor_candidates.2.donor_inventory": "REHEARSAL_EVIDENCE",
+    "donor_candidates.2.donor_name": "REAL_PUBLIC",
+    "donor_candidates.2.donor_id": "REAL_PUBLIC",
+    "donor_candidates.3.route": "LIVE_EXTERNAL_API",
+    "donor_candidates.3.donor_inventory": "REHEARSAL_EVIDENCE",
+    "donor_candidates.3.donor_name": "REAL_PUBLIC",
+    "donor_candidates.3.donor_id": "REAL_PUBLIC",
+    "scenario_id": "REHEARSAL_ASSUMPTION",
+    "mode": "REHEARSAL_ASSUMPTION",
+    "rehearsal_label": "REHEARSAL_ASSUMPTION",
+    "district": "REAL_PUBLIC",
+    "recipient_facility": "REAL_PUBLIC",
+    "commodity.policy": "REAL_PUBLIC",
+    "district_public_stock_context": "REAL_PUBLIC",
+    "stock_source_date": "REAL_PUBLIC",
+    "facility_observation": "REHEARSAL_EVIDENCE",
+    "programme_obligation.public_programme_basis": "REAL_PUBLIC",
+    "programme_obligation.estimated_population": "REHEARSAL_ASSUMPTION",
+    "baseline_demand": "REHEARSAL_ASSUMPTION",
+    "forecast": "MODEL_DERIVED",
+    "programme_demand": "MODEL_DERIVED",
+    "coverage_breach_day": "MODEL_DERIVED",
+    "stockout_day": "MODEL_DERIVED",
+    "exposure_range": "MODEL_DERIVED",
+    "transfer_quantity": "MODEL_DERIVED",
+    "initial_donor_candidates": "MODEL_DERIVED",
+    "donor_candidates": "MODEL_DERIVED",
+    "evidence_correction": "REHEARSAL_EVIDENCE",
+    "coverage_recovery": "MODEL_DERIVED",
+    "care_delivery_verification": "REHEARSAL_EVIDENCE",
+    "unknown_facts": "UNKNOWN",
+    "route_observations": "LIVE_EXTERNAL_API",
+    "initial_chosen_donor": "MODEL_DERIVED",
+    "replanned_donor": "MODEL_DERIVED",
+    "lifecycle": "MODEL_DERIVED",
+    "generated_at": "MODEL_DERIVED"
+  },
+  "derived_from": {
+    "schema_version": [
+      "JudgeScenarioContract:0.8.1"
+    ],
+    "forecast": [
+      "inv-chc-lahunipada-v-001",
+      "obligation-lahunipada-anc-2025-05-001",
+      "rehearsal-supply-lahunipada-001",
+      "demand:rehearsal-model-demand-chc-lahunipada"
+    ],
+    "programme_demand": [
+      "forecast.initial.projection"
+    ],
+    "coverage_breach_day": [
+      "forecast.initial.projection"
+    ],
+    "stockout_day": [
+      "forecast.initial.projection"
+    ],
+    "exposure_range": [
+      "obligation-lahunipada-anc-2025-05-001"
+    ],
+    "transfer_quantity": [
+      "intervention-plan:recalculated"
+    ],
+    "initial_donor_candidates": [
+      "route_observations",
+      "inventory",
+      "forecast"
+    ],
+    "donor_candidates": [
+      "route_observations",
+      "inventory:evidence/ev-002",
+      "forecast"
+    ],
+    "coverage_recovery": [
+      "verification",
+      "reconciliation"
+    ],
+    "initial_chosen_donor": [
+      "intervention-plan:initial"
+    ],
+    "replanned_donor": [
+      "intervention-plan:recalculated"
+    ],
+    "lifecycle": [
+      "audit"
+    ],
+    "generated_at": [
+      "runtime-clock"
+    ]
+  },
+  "assumption_notes": {
+    "commodity.pack_size": "One tablet is arithmetic granularity only; official issue packaging is unavailable.",
+    "district.forecast_at": "Fixed scenario clock for deterministic rehearsal replay.",
+    "programme_obligation": "Controlled aggregate session; no public facility denominator or patient identities are available.",
+    "scenario_id": "Stable identifier for this controlled rehearsal scenario.",
+    "mode": "This contract intentionally describes a rehearsal, not an operational claim.",
+    "rehearsal_label": "The label makes public context, controlled observations, and model outputs explicit.",
+    "programme_obligation.estimated_population": "Controlled facility-session rehearsal range because public KPI has no Lahunipada denominator.",
+    "baseline_demand": "Controlled 4-tablet/day rate used to exercise the deterministic kernel; it is not observed dispensing history."
+  },
+  "unknown_facts": [
+    "Official facility-level IFA inventory is not public in this capture.",
+    "Current HMIS facility consumption and patient-level care records are not present.",
+    "Coordinates are corroborating OSM points; official HFR coordinates are not captured.",
+    "Physical dispatch pack size is unknown; 47 is a calculation quantity requiring operational pack conversion."
+  ],
+  "generated_at": "2026-09-12T08:34:18.212227Z"
+}

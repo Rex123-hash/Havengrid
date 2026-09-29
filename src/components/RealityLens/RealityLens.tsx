@@ -70,11 +70,11 @@ export function RealityLens({ evidence, confirmed, onConfirm }: Props) {
             <div className={styles.row}>
               <span>Predicted breach</span>
               <b className="num">
-                {evidence.breachDayBefore}d <span className={styles.arrow}>→</span>{' '}
-                <em>{evidence.breachDayAfter}d</em>
+                {evidence.breachDayBefore === null ? '—' : `${evidence.breachDayBefore}d`} <span className={styles.arrow}>→</span>{' '}
+                <em>{evidence.breachDayAfter === null ? '—' : `${evidence.breachDayAfter}d`}</em>
               </b>
             </div>
-            <p className={styles.cascadeNote}>Donor falls below its safety floor — the original plan is invalidated.</p>
+            <p className={styles.cascadeNote}>The donor can no longer cover its own forward demand — the original plan is invalidated.</p>
           </div>
         </div>
       </div>

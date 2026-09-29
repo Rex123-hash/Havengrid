@@ -122,7 +122,8 @@ export function BreachBeat({ opacity, scenario }: { opacity: number; scenario: L
         <Row label={`Projected demand · ${item.demandWindowDays}d`} value={`${item.projectedDemand} ${item.unit}`} />
         <Row label="Deficit" value={`${deficit} ${item.unit}`} />
         <Row label="Next replenishment" value={`+${item.replenishmentEtaDays} days`} />
-        <Row label="Predicted breach" value={`day ${item.breachDay}`} tone="critical" />
+        <Row label="Coverage at risk" value={`day ${item.coverageBreachDay}`} tone="critical" />
+        {item.stockoutDay !== null && <Row label="Physical stockout" value={`day ${item.stockoutDay}`} tone="critical" />}
 
         <p className={styles.stale}>
           ◍ inventory last verified <span className="num">{focus.daysSinceVerified}</span> days ago
@@ -199,7 +200,7 @@ function CandidateRow({ candidate, shown }: { candidate: CandidateIntervention; 
       <span className={styles.candidateBody}>
         <b>{candidate.facilityName}</b>
         <i>
-          <span className="num">{candidate.surplus}</span> surplus ·{' '}
+          <span className="num">{Math.max(0, candidate.transferable)}</span> transferable ·{' '}
           <span className="num">{candidate.distanceKm}</span> km — {candidate.reason}
         </i>
       </span>

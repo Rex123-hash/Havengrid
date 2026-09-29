@@ -1,0 +1,18 @@
+{
+  "capture_method": "AMB KPI API response",
+  "source_url": "https://stage-api-test.anemiamuktbharat.info/report/kpiMonthly",
+  "retrieved_at": "2026-09-11T21:49:00Z",
+  "data_as_on": "2026-06-03",
+  "financial_year": "2025-2026",
+  "month": "May",
+  "district": "SUNDARGARH",
+  "district_code": "IND021005",
+  "indicators": {
+    "pregnant_women_given_180_ifa_percent": 84.4,
+    "lactating_mothers_given_180_ifa_percent": 65.9,
+    "children_6_59_given_ifa_percent": 70.7,
+    "adolescents_given_ifa_percent": 44.5,
+    "children_5_9_given_ifa_percent": 24.2,
+    "index_value": 57.9
+  }
+}

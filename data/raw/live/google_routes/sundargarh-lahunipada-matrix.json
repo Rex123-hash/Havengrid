@@ -1,0 +1,95 @@
+{
+  "endpoint": "https://routes.googleapis.com/directions/v2:computeRoutes",
+  "retrieved_at": "2026-09-11T21:51:05.0083194Z",
+  "provider": "google_routes",
+  "routes": [
+    {
+      "from_id": "sdh-bonai",
+      "retrieved_at": "2026-09-11T21:51:00.0534822Z",
+      "to_id": "chc-lahunipada",
+      "origin": {
+        "longitude": 84.95452,
+        "latitude": 21.82004
+      },
+      "destination": {
+        "longitude": 85.0756074,
+        "latitude": 21.8361054
+      },
+      "response": {
+        "routes": [
+          {
+            "distanceMeters": 16447,
+            "duration": "1919s",
+            "staticDuration": "1919s"
+          }
+        ]
+      }
+    },
+    {
+      "from_id": "sdh-panposh",
+      "retrieved_at": "2026-09-11T21:51:01.3342999Z",
+      "to_id": "chc-lahunipada",
+      "origin": {
+        "longitude": 84.8044922,
+        "latitude": 22.2295801
+      },
+      "destination": {
+        "longitude": 85.0756074,
+        "latitude": 21.8361054
+      },
+      "response": {
+        "routes": [
+          {
+            "distanceMeters": 73201,
+            "duration": "6075s",
+            "staticDuration": "6075s"
+          }
+        ]
+      }
+    },
+    {
+      "from_id": "chc-laing",
+      "retrieved_at": "2026-09-11T21:51:02.6109506Z",
+      "to_id": "chc-lahunipada",
+      "origin": {
+        "longitude": 84.6536373,
+        "latitude": 22.2392629
+      },
+      "destination": {
+        "longitude": 85.0756074,
+        "latitude": 21.8361054
+      },
+      "response": {
+        "routes": [
+          {
+            "distanceMeters": 90163,
+            "duration": "7343s",
+            "staticDuration": "7343s"
+          }
+        ]
+      }
+    },
+    {
+      "from_id": "chc-mangaspur",
+      "retrieved_at": "2026-09-11T21:51:03.8222451Z",
+      "to_id": "chc-lahunipada",
+      "origin": {
+        "longitude": 83.9901732,
+        "latitude": 21.9518497
+      },
+      "destination": {
+        "longitude": 85.0756074,
+        "latitude": 21.8361054
+      },
+      "response": {
+        "routes": [
+          {
+            "distanceMeters": 155743,
+            "duration": "13403s",
+            "staticDuration": "13403s"
+          }
+        ]
+      }
+    }
+  ]
+}

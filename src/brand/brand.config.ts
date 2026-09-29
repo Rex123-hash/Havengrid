@@ -78,7 +78,7 @@ export const copy = {
   candidates: {
     eyebrow: 'Candidate sources',
     headline: "The closest supply isn't always the safest choice.",
-    body: 'Each option is tested against the donor’s own forecast, its safety floor, transit time and expiry pressure.',
+    body: 'Each option is tested against the donor’s own forward coverage, its transferable surplus, transit time and expiry pressure.',
   },
   intervention: {
     eyebrow: 'Recommended intervention',
@@ -124,7 +124,7 @@ export const copy = {
         key: 'intervene',
         title: 'Intervene',
         lead: 'Constraint-aware recovery',
-        body: 'Every candidate donor is checked against its own forecast, safety floor, transit window and expiry pressure before it is proposed.',
+        body: 'Every candidate donor is checked against its own forward coverage, transferable surplus, transit window and expiry pressure before it is proposed.',
       },
       {
         key: 'verify',

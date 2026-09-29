@@ -1,0 +1,446 @@
+import type {
+  Fact,
+  FactClass,
+  Facility,
+  Scenario,
+  WorkspaceProvider,
+} from "./contracts";
+export const fact = <T extends string | number | null>(
+  value: T,
+  classification: FactClass,
+  source: string,
+  explanation: string,
+): Fact<T> => ({
+  value,
+  classification,
+  source,
+  explanation,
+  asOf: "12 Sep 2026 · rehearsal snapshot",
+});
+const field = (value: number | null) =>
+  fact(
+    value,
+    value === null ? "UNKNOWN" : "REHEARSAL_EVIDENCE",
+    "Controlled shelf observation",
+    value === null
+      ? "No verified facility inventory has been admitted."
+      : "Controlled rehearsal count. This is not official facility stock.",
+  );
+const facility = (
+  id: string,
+  name: string,
+  short: string,
+  tier: Facility["tier"],
+  block: string,
+  risk: Facility["risk"],
+  stock: number | null,
+  x: number,
+  y: number,
+  currentness: Facility["currentness"] = "Verified",
+): Facility => ({
+  id,
+  name,
+  short,
+  tier,
+  block,
+  risk,
+  stock: field(stock),
+  x,
+  y,
+  currentness,
+  evidenceAge: stock === null ? "No count" : "Snapshot · Sep 12",
+  inventoryStatus:
+    stock === null
+      ? "Inventory required"
+      : currentness === "Corroborated"
+        ? "Source stale"
+        : "Available",
+  active: id === "chc-lahunipada",
+});
+const model = (value: string | number, explanation: string) =>
+  fact(
+    value,
+    "MODEL_DERIVED",
+    "Approved deterministic rehearsal contract",
+    explanation,
+  );
+const assumption = (value: string | number, explanation: string) =>
+  fact(
+    value,
+    "REHEARSAL_ASSUMPTION",
+    "Controlled scenario fixture",
+    explanation,
+  );
+const route = (value: string) =>
+  fact(
+    value,
+    "LIVE_EXTERNAL_API",
+    "Google Routes · captured Sep 11, 2026",
+    "Persisted route response, replayed for this UI. It is not a live traffic refresh.",
+  );
+const scenario: Scenario = {
+  id: "case-lahunipada-ifa-red-rehearsal-001",
+  title: "Lahunipada · IFA continuity",
+  snapshot: "12 Sep 2026",
+  commodity: "IFA Red",
+  formulation: "60 mg elemental iron + 500 µg folic acid",
+  recipientId: "chc-lahunipada",
+  selectedId: "sdh-panposh",
+  invalidatedId: "sdh-bonai",
+  facilities: [
+    facility(
+      "dhh-sundargarh",
+      "District Headquarters Hospital Sundargarh",
+      "Sundargarh DHH",
+      "DHH",
+      "Sundargarh",
+      "Unknown",
+      null,
+      145,
+      265,
+    ),
+    facility(
+      "sdh-bonai",
+      "Sub-Divisional Hospital Bonai",
+      "Bonai SDH",
+      "SDH",
+      "Bonai",
+      "At risk",
+      20,
+      330,
+      207,
+    ),
+    facility(
+      "sdh-panposh",
+      "Sub-Divisional Hospital Panposh",
+      "Panposh SDH",
+      "SDH",
+      "Panposh",
+      "Stable",
+      220,
+      535,
+      107,
+    ),
+    facility(
+      "chc-lahunipada",
+      "Community Health Centre Lahunipada",
+      "Lahunipada CHC",
+      "CHC",
+      "Lahunipada",
+      "At risk",
+      30,
+      660,
+      277,
+    ),
+    facility(
+      "chc-sargipali",
+      "Community Health Centre Sargipali",
+      "Sargipali CHC",
+      "CHC",
+      "Tangarpali",
+      "Unknown",
+      null,
+      318,
+      348,
+    ),
+    facility(
+      "chc-laing",
+      "Community Health Centre Laing",
+      "Laing CHC",
+      "CHC",
+      "Kutra",
+      "Watch",
+      210,
+      821,
+      130,
+      "Corroborated",
+    ),
+    facility(
+      "chc-mangaspur",
+      "Community Health Centre Mangaspur",
+      "Mangaspur CHC",
+      "CHC",
+      "Hemgir",
+      "Watch",
+      260,
+      846,
+      321,
+      "Corroborated",
+    ),
+  ],
+  donors: [
+    {
+      facilityId: "sdh-panposh",
+      distance: route("73.2 km"),
+      duration: "1h 41m",
+      quantity: model(
+        47,
+        "Transfer calculation, not a confirmed dispatch pack.",
+      ),
+      margin: model(103, "Remaining margin after the proposed transfer."),
+      verdict: "Recommended",
+      reason: "Coverage preserved at both facilities",
+      expiry: assumption("Mar 2027", "Rehearsal batch-register expiry."),
+    },
+    {
+      facilityId: "sdh-bonai",
+      distance: route("16.4 km"),
+      duration: "32m",
+      quantity: model(0, "Rejected candidate; no transfer recommended."),
+      margin: fact(
+        "Unsafe",
+        "MODEL_DERIVED",
+        "Donor continuity evaluation",
+        "Corrected stock breaches donor continuity.",
+      ),
+      verdict: "Invalidated",
+      reason: "DONOR_ALREADY_AT_RISK",
+      expiry: assumption(
+        "Day 10",
+        "Controlled expiry pressure in the initial scenario.",
+      ),
+    },
+    {
+      facilityId: "chc-laing",
+      distance: route("90.2 km"),
+      duration: "2h 02m",
+      quantity: model(47, "Candidate calculation from approved rehearsal."),
+      margin: fact(
+        "Review needed",
+        "UNKNOWN",
+        "Currentness review",
+        "Facility is historically corroborated; do not imply current verification.",
+      ),
+      verdict: "Held",
+      reason: "Historical facility identity requires review",
+      expiry: assumption("Mar 2027", "Controlled batch register."),
+    },
+    {
+      facilityId: "chc-mangaspur",
+      distance: route("155.7 km"),
+      duration: "3h 43m",
+      quantity: model(47, "Candidate calculation from approved rehearsal."),
+      margin: fact(
+        "Review needed",
+        "UNKNOWN",
+        "Currentness review",
+        "Authoritative currentness remains unverified.",
+      ),
+      verdict: "Held",
+      reason: "Longer captured route; currentness review needed",
+      expiry: assumption("Mar 2027", "Controlled batch register."),
+    },
+  ],
+  breach: model("Day 5", "First forecast day below the continuity threshold."),
+  stockout: model(
+    "Day 8",
+    "First forecast day with a negative closing balance.",
+  ),
+  exposure: assumption(
+    "11–15",
+    "Aggregate antenatal supplementation obligations. No facility denominator is available; public AMB KPI does not derive this range.",
+  ),
+  baseline: assumption(
+    "4 tablets/day",
+    "Controlled dispensing rate; no historical facility consumption export.",
+  ),
+  demand: model(
+    69,
+    "56 baseline tablets over 14 days plus 13 aggregate programme units.",
+  ),
+  transfer: model(
+    47,
+    "Calculated from stock, baseline demand and aggregate obligation midpoint. Physical packaging remains unknown.",
+  ),
+  recoveredStock: model(
+    77,
+    "30 recipient tablets + 47 transferred calculation units.",
+  ),
+  dispatchUnit: fact(
+    "Unknown",
+    "UNKNOWN",
+    "Official issue-unit data unavailable",
+    "No strip or carton rule is invented. Operational pack conversion must be resolved before physical dispatch.",
+  ),
+  programmeKpi: fact(
+    "84.4%",
+    "REAL_PUBLIC",
+    "AMB KPI · May FY 2025–26",
+    "District proportion of pregnant women given 180 IFA tablets; no Lahunipada denominator.",
+  ),
+  incoming: assumption(
+    "120 tablets · Day 14",
+    "Controlled supply schedule, not an operational delivery commitment.",
+  ),
+  evidence: [
+    {
+      id: "bonai-count",
+      facilityId: "sdh-bonai",
+      previous: 120,
+      observed: 20,
+      status: "Confirmed",
+      captured: "12 Sep · scenario day 1",
+      source: "Controlled shelf count",
+      confidence: "Human-entered · no AI extraction",
+      batch: "Unavailable",
+      expiry: "Unavailable",
+    },
+    {
+      id: "laing-recount",
+      facilityId: "chc-laing",
+      previous: 210,
+      observed: 198,
+      status: "Awaiting review",
+      captured: "UI review fixture",
+      source: "Rehearsal recount",
+      confidence: "Human-entered · unverified",
+      batch: "Unavailable",
+      expiry: "Unavailable",
+    },
+    {
+      id: "mangaspur-conflict",
+      facilityId: "chc-mangaspur",
+      previous: 260,
+      observed: 244,
+      status: "Conflict",
+      captured: "UI review fixture",
+      source: "Conflicting rehearsal count",
+      confidence: "Human review required",
+      batch: "Unavailable",
+      expiry: "Unavailable",
+    },
+  ],
+  readiness: [
+    {
+      label: "Facility roster",
+      state: "Partial",
+      detail: "5 verified · 2 historically corroborated",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      label: "Programme activity",
+      state: "Verified",
+      detail: "AMB district KPI; facility denominator unavailable",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      label: "District stock",
+      state: "Verified",
+      detail: "Public AMB capture · quality flags retained",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      label: "Facility inventory",
+      state: "Partial",
+      detail: "Rehearsal counts only; official facility stock unknown",
+      classification: "REHEARSAL_EVIDENCE",
+    },
+    {
+      label: "Routes",
+      state: "Captured",
+      detail: "4 Google Routes responses · Sep 11",
+      classification: "LIVE_EXTERNAL_API",
+    },
+    {
+      label: "Policy",
+      state: "Public basis",
+      detail: "AMB IFA policy; planning threshold is a rehearsal assumption",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      label: "Care obligations",
+      state: "Estimated",
+      detail: "11–15 controlled obligations; no facility denominator",
+      classification: "REHEARSAL_ASSUMPTION",
+    },
+  ],
+  sources: [
+    {
+      name: "Odisha facility directory",
+      authority: "Government of Odisha",
+      period: "Document · Jun 13, 2026",
+      fields: "Facility identities and blocks",
+      url: "https://health.odisha.gov.in/or/healthinstitutes/parathama-raepharaala-yaunaita",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      name: "Anemia Mukt Bharat · stock",
+      authority: "AMB public dashboard",
+      period: "FY 2025–26 · as on Jun 3",
+      fields: "District aggregate stock only",
+      url: "https://www.anemiamuktbharat.info/reports/stock",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      name: "AMB programme indicators",
+      authority: "AMB / HMIS programme context",
+      period: "May · FY 2025–26",
+      fields: "District KPI percentages",
+      url: "https://www.anemiamuktbharat.info/reports/key-performance-indicators",
+      classification: "REAL_PUBLIC",
+    },
+    {
+      name: "Google Routes",
+      authority: "Google Maps Platform",
+      period: "Captured Sep 11, 2026",
+      fields: "Distance and travel time · captured, not live",
+      url: "https://developers.google.com/maps/documentation/routes",
+      classification: "LIVE_EXTERNAL_API",
+    },
+  ],
+};
+export const mockProvider: WorkspaceProvider & { getScenario(): Scenario } = {
+  getScenario: () => scenario,
+  load: async () => ({ scenario, mode: "REHEARSAL", caseState: "PLAN_RECALCULATED", domainLegalActions: ["approve", "submit_evidence"],
+    authorizationStatus: "not_evaluated", completedActions: [], limitations: [], previousPlanInvalidated: true,
+    coverageStatus: "not_verified", careProtected: false, careImpactExposed: fact("Unavailable", "UNKNOWN", "Mock scenario", "No backend care impact."),
+    districtStockSignals: [], source: "mock" }),
+  confirmEvidence: async () => { throw new Error("Mock review commands are not available in this workspace mode."); },
+  rejectEvidence: async () => { throw new Error("Mock review commands are not available in this workspace mode."); },
+  districts: ["Sundargarh", "Sambalpur", "Kalahandi"],
+};
+export const pageInfo: Record<string, [string, string]> = {
+  situation: ["Situation Room", "Anticipate risk. Keep care in motion."],
+  network: [
+    "District Network",
+    "See the relationships behind a resilient district.",
+  ],
+  facilities: ["Facilities", "A clear view of every place care happens."],
+  cases: ["Recovery Cases", "From the first signal to care protected."],
+  evidence: ["Evidence Inbox", "Bring the record closer to reality."],
+  recovery: ["Recovery", "Verify the movement. Then verify the care."],
+  intelligence: [
+    "District Intelligence",
+    "Know what is known. Make the gaps visible.",
+  ],
+  settings: [
+    "Workspace Settings",
+    "A considered workspace for your district team.",
+  ],
+};
+export const gapItems = [
+  [
+    "Inventory required",
+    "2 facilities have no rehearsal stock count. Official facility stock is unavailable across the roster.",
+  ],
+  [
+    "Facility unverified",
+    "Laing and Mangaspur need current authoritative confirmation.",
+  ],
+  [
+    "Care not supported",
+    "A public Lahunipada denominator is unavailable. The care range is a rehearsal assumption.",
+  ],
+  [
+    "Route unavailable",
+    "Routes exist for four captured donor pairs only. Other travel estimates are unavailable.",
+  ],
+  [
+    "Source stale",
+    "Public stock describes FY 2025–26. It is context, not current facility stock.",
+  ],
+  [
+    "Batch / expiry unavailable",
+    "Operational batch and packaging data have not been admitted.",
+  ],
+];

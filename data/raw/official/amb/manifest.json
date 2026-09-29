@@ -1,0 +1,45 @@
+{
+  "source_family": "amb_stock_dashboard",
+  "source_url": "https://www.anemiamuktbharat.info/reports/stock",
+  "publisher": "Anemia Mukt Bharat / National Health Mission",
+  "captures": [
+    {
+      "path": "sundargarh-ifa-stock-2025-2026.json",
+      "district": "SUNDARGARH",
+      "state": "ODISHA",
+      "financial_year": "2025-2026",
+      "data_as_on": "2026-06-03",
+      "retrieved_at": "2026-09-11T20:46:09.079Z",
+      "sha256": "5005F5917EA8D399684DFD06B29CB4F2F50D0879297B7B9D6E9BFA5EC0700961",
+      "capture_method": "public_rendered_page",
+      "unit": "figures in lakhs"
+    },
+    {
+      "path": "sambalpur-ifa-stock-2025-2026.json",
+      "district": "SAMBALPUR",
+      "state": "ODISHA",
+      "financial_year": "2025-2026",
+      "data_as_on": "2026-06-03",
+      "retrieved_at": "2026-09-11T21:00:30.737Z",
+      "sha256": "8BFBB73F466B1C96297348A6308E19E2203C203A5DA837CCAE2A1CA3C8328766",
+      "capture_method": "public_rendered_page",
+      "unit": "figures in lakhs"
+    },
+    {
+      "path": "kalahandi-ifa-stock-2025-2026.json",
+      "district": "KALAHANDI",
+      "state": "ODISHA",
+      "financial_year": "2025-2026",
+      "data_as_on": "2026-06-03",
+      "retrieved_at": "2026-09-11T21:00:51.634Z",
+      "sha256": "FDEDBE3649BDD677790AA75FE450EC5ED81EE0CB3A7E4239877FE68EB0362383",
+      "capture_method": "public_rendered_page",
+      "unit": "figures in lakhs",
+      "quality_note": "Rendered source includes negative reported values in some months; parser retains them as quality-flagged context and they are not usable facility stock."
+    }
+  ],
+  "notes": [
+    "The dashboard rendered table is preserved as the raw capture; no private endpoint or authentication bypass was used.",
+    "The capture is district aggregate context and is never loaded as facility inventory."
+  ]
+}

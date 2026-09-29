@@ -175,14 +175,14 @@ export function NetworkStage({ scenario: sourceScenario, state: sourceState, red
         <button className={styles.sleeveTab} aria-expanded={sleeveOpen} aria-controls={forecastId} onClick={() => {setHover(null);setSleeveOpen(v => !v);}} aria-label={sleeveOpen ? 'Close Bhatpar forecast' : 'Open Bhatpar forecast'}>
           {sleeveOpen ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           <span>{state.resolved ? 'CARE PROTECTED' : 'BHATPAR FORECAST'}</span>
-          <b>{state.resolved ? scenario.totalCareEventsExposed : `${scenario.item.breachDay}D`}</b>
+          <b>{state.resolved ? scenario.totalCareEventsExposed : `${scenario.item.coverageBreachDay}D`}</b>
         </button>
       <div className={styles.sleeveReveal} aria-hidden={!sleeveOpen}>
       <div id={forecastId} className={styles.forecast} data-resolved={state.resolved}>
         <div className={styles.forecastHeading}><span>{focus.name}</span><i>{state.resolved ? 'VERIFIED' : 'FORECAST'}</i></div>
         <p>{state.resolved ? 'Care continuity restored' : state.horizonDay < 1 ? 'Stock available today' : `Looking ${Math.round(state.horizonDay)} days ahead`}</p>
-        <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.breachDay}<small>{state.resolved ? 'care events protected' : 'days · predicted shortage'}</small></strong>
-        {!state.resolved && <div className={styles.forecastCare}><b>{scenario.totalCareEventsExposed}</b> future care events exposed</div>}
+        <strong>{state.resolved ? scenario.totalCareEventsExposed : scenario.item.coverageBreachDay}<small>{state.resolved ? 'care events protected' : 'days · care coverage at risk'}</small></strong>
+        {!state.resolved && <div className={styles.forecastCare}><b>{scenario.careExposure.exposed}</b> of {scenario.careExposure.scheduled} scheduled care events exposed{scenario.item.stockoutDay !== null && <> · stockout day {scenario.item.stockoutDay}</>}</div>}
         <div className={styles.stockComparison}><span>Stock <b>{scenario.item.currentStock + (state.resolved ? state.activePlan.transferUnits! : 0)}</b></span><span>14-day need <b>{scenario.item.projectedDemand}</b></span></div>
         <span className={styles.forecastNote}>Illustrative demo · {scenario.item.name}</span>
       </div>
